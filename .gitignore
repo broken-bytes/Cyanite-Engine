@@ -1,2 +1,7 @@
 Cyanite
 .vs
+x64
+x86
+Release
+Debug
+.pch
