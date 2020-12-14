@@ -1,0 +1,1 @@
+#define assert_m(expr, msg) assert(( (void)(msg), (expr) ))
