@@ -1,0 +1,12 @@
+[submodule "Input"]
+	path = Input
+	url = https://github.com/broken-bytes/ControllerKit.git
+[submodule "Networking"]
+	path = Networking
+	url = https://github.com/broken-bytes/GameNet.git
+[submodule "Graphics"]
+	path = Graphics
+	url = https://github.com/broken-bytes/GraphicsKit.git
+[submodule "Audio"]
+	path = Audio
+	url = https://github.com/ValveSoftware/steam-audio.git
