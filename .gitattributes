@@ -1,2 +1,4 @@
 *.hxx linguist-language=C++
 *.cxx linguist-language=C++
+
+*.swift linguist-language=Swift
