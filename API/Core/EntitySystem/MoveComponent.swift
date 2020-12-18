@@ -1,3 +1,3 @@
 struct MoveComponent: Component {
-    var speed: Float
+    var translation: Vector3
 }
