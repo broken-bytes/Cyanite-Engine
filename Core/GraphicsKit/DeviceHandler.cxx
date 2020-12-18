@@ -2,19 +2,14 @@
 #include "DeviceHandler.hxx"
 
 #include "GraphicsHandler.hxx"
+#include "FactoryHandler.hxx"
 
-namespace Cyanide::GraphicsKit::DeviceHandler {
+namespace Cyanite::GraphicsKit::DeviceHandler {
 	auto QueryAdapters()-> winrt::com_ptr<IDXGIAdapter4>
 	{
 		winrt::com_ptr<IDXGIAdapter4> adapter;
 		// You begin DXCore adapter enumeration by creating an adapter factory.
-		winrt::com_ptr<IDXGIFactory7> factory;
-		winrt::check_hresult(
-			CreateDXGIFactory2(
-				DXGI_CREATE_FACTORY_DEBUG,
-				IID_PPV_ARGS(factory.put())
-			)
-		);
+		winrt::com_ptr<IDXGIFactory7> factory = FactoryHandler::CreateFactory();
 
 		for (
 			uint8_t index = 0;

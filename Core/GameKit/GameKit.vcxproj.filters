@@ -21,6 +21,12 @@
     <ClInclude Include="pch.hxx">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Engine.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IEngine.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cxx">
@@ -29,5 +35,11 @@
     <ClCompile Include="pch.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

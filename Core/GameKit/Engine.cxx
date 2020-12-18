@@ -1,43 +1,46 @@
 #include "pch.hxx"
-#include "Game.hxx"
+#include "Engine.hxx"
+
+#include "pch.hxx"
+#include "Engine.hxx"
 #include "../AssetKit/AssetHandler.hxx"
 #include "../GraphicsKit/GraphicsHandler.hxx"
 
 namespace Cyanite::GameKit {
-	Game::Game(HWND handle) {
+	Engine::Engine(HWND handle) {
 		_handle = handle;
 		_graphics = std::make_unique<GraphicsKit::GraphicsHandler>(handle);
 	}
-	
-	auto Game::StartUp() -> void {
+
+	auto Engine::StartUp() -> void {
 		AssetKit::AssetHandler::Initialize();
 		_graphics->Initialize();
 	}
 
-	auto Game::CleanUp() -> void {
+	auto Engine::CleanUp() -> void {
 		_graphics->Deinitialize();
 	}
 
-	auto Game::Shutdown() -> void {
+	auto Engine::Shutdown() -> void {
 		_graphics->Deinitialize();
 	}
 
-	auto Game::OnInit() -> void {
+	auto Engine::OnInit() -> void {
 	}
-	
-	auto Game::OnUpdate() -> void {
+
+	auto Engine::OnUpdate() -> void {
 		_graphics->Update();
 	}
-	
-	auto Game::OnRender() -> void {
+
+	auto Engine::OnRender() -> void {
 		_graphics->Render();
 	}
-	
-	auto Game::OnDestroy() -> void {
+
+	auto Engine::OnDestroy() -> void {
 		this->Shutdown();
 	}
 
-	auto Game::OnResize(uint32_t width, uint32_t height) -> void {
+	auto Engine::OnResize(uint32_t width, uint32_t height) -> void {
 		_graphics->Resize(width, height);
 	}
 }
