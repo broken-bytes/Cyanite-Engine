@@ -5,11 +5,15 @@ protocol IComponentDispatcher {
     func update() -> Void
 }
 
-class ComponentDispatcher<T, U, V> : IComponentDispatcher {
-    var entities: [Entity] { get { entities() }}
+class ComponentDispatcher<T: Component, U: Component, V: Component> : IComponentDispatcher {
+    var entities: [Entity] { get { getEntities() }}
+
+    func execute() -> Void {
+    }
+    func update() -> Void {}
 
 
-    private func entities() -> [Entity] {
-        return EntityPool.entities(c0: T, c1: U, c2: V)
+    private func getEntities() -> [Entity] {
+        return EntityPool.default.entities(T.self, U.self, V.self)
     }
 }
