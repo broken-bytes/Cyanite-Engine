@@ -1,0 +1,22 @@
+Compiling the Swift compiler identification source file "CompilerId/main.swift" failed.
+Compiler: C:/Library/Developer/Toolchains/unknown-Asserts-development.xctoolchain/usr/bin/swiftc.exe 
+Build flags: -sdk;%SDKROOT%
+Id flags:  
+
+The output was:
+1
+<unknown>:0: warning: no such SDK: '%SDKROOT%'
+<unknown>:0: error: unable to load standard library for target 'x86_64-unknown-windows-msvc'
+
+
+Compiling the Swift compiler identification source file "CompilerId/main.swift" failed.
+Compiler: C:/Library/Developer/Toolchains/unknown-Asserts-development.xctoolchain/usr/bin/swiftc.exe 
+Build flags: 
+Id flags:  
+
+The output was:
+1
+clang: error: no such file or directory: 'C:\Library\Developer\Toolchains\unknown-Asserts-development.xctoolchain\usr\lib\swift\windows\x86_64\swiftrt.obj'
+<unknown>:0: error: link command failed with exit code 1 (use -v to see invocation)
+
+

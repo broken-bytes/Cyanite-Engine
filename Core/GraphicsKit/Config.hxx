@@ -10,3 +10,7 @@ constexpr uint8_t CommandListPre = 0;
 constexpr uint8_t CommandListMid = 1;
 constexpr uint8_t CommandListPost = 2;
 constexpr uint8_t CommandListCount = 3;
+
+constexpr uint64_t GPU_VIRTUAL_ADDRESS_UNDEF = static_cast<D3D12_GPU_VIRTUAL_ADDRESS>(0);
+
+constexpr uint64_t GPU_VIRTUAL_ADDRESS_UNKNOWN = static_cast<D3D12_GPU_VIRTUAL_ADDRESS>(-1);

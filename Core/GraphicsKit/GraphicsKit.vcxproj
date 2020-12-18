@@ -168,6 +168,7 @@
     <ClInclude Include="FactoryHandler.hxx" />
     <ClInclude Include="Frame.hxx" />
     <ClInclude Include="GPUBuffer.hxx" />
+    <ClInclude Include="GpuResource.hxx" />
     <ClInclude Include="GraphicsHandler.hxx" />
     <ClInclude Include="Light.hxx" />
     <ClInclude Include="Helpers.hxx" />
