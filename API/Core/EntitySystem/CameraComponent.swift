@@ -1,3 +1,5 @@
+import Math
+
 struct CameraComponent  {
     var clippingPlane: Range<Float>
     var fov: Float

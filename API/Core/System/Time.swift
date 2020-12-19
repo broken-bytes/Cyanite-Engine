@@ -1,7 +1,7 @@
 class Time {
-    public var: frameTime: Double { get { getFrameTime()}}
-    public var: fixedTime: Double { get { getFixedTime()}}
-    public var: lifeTime: Double { get { getLifeTime()}}
+    public var frameTime: Double { get { getFrameTime()}}
+    public var fixedTime: Double { get { getFixedTime()}}
+    public var lifeTime: Double { get { getLifeTime()}}
 
     private func getFrameTime() -> Double{
         return 0

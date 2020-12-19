@@ -1,3 +1,5 @@
+import Math
+
 class Input {
     public var mouse: Vector2 { get {}}
 

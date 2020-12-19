@@ -1,3 +1,5 @@
+import Math
+
 struct TransformComponent: Component {
    var position: Vector3
    var rotation: Quaternion

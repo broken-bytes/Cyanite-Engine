@@ -3,7 +3,7 @@ class DispatchHandler() {
     public let `default`: DispatchHandler = DispatchHandler()
 
     private var dispatchers: [ComponentDispatcher] = []
-    private let cores: Uint
+    private var cores: UInt
 
     private init() {
         cores = SystemInfo.cpuCount
