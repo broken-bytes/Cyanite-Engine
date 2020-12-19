@@ -1,3 +1,0 @@
-C:/Users/Marcel/Documents/Projects/Cyanite-Engine/Bindings/build/CMakeFiles/GameScripts.dir
-C:/Users/Marcel/Documents/Projects/Cyanite-Engine/Bindings/build/CMakeFiles/edit_cache.dir
-C:/Users/Marcel/Documents/Projects/Cyanite-Engine/Bindings/build/CMakeFiles/rebuild_cache.dir
