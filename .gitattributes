@@ -7,5 +7,5 @@
 *.vcxproj.* -linguist-vendored
 *.sln -linguist-vendored
 *.md -linguist-vendored
-
+*.cmake -linguist-vendored
 
