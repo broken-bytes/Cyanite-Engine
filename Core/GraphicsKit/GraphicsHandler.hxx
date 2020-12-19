@@ -3,6 +3,7 @@
 #include "pch.hxx"
 
 #include "Frame.hxx"
+#include "Gpu.hxx"
 
 
 namespace Cyanite::GraphicsKit {
@@ -46,7 +47,7 @@ namespace Cyanite::GraphicsKit {
 		CD3DX12_RECT _scissorRect;
 		winrt::com_ptr<IDXGIFactory7> _factory;
 		winrt::com_ptr<IDXGISwapChain4> _swapChain;
-		winrt::com_ptr<ID3D12Device8> _device;
+		std::unique_ptr<Gpu> _device;
 		std::array<winrt::com_ptr<ID3D12Resource>, Frames> _renderTargets;
 		winrt::com_ptr<ID3D12CommandAllocator> _commandAllocator;
 		winrt::com_ptr<ID3D12CommandQueue> _commandQueue;
@@ -77,15 +78,9 @@ namespace Cyanite::GraphicsKit {
 		HANDLE _workerFinishShadowPass[Frames];
 		HANDLE _workerFinishedRenderFrame[Frames];
 		HANDLE _threadHandles[Frames];
-		uint32_t _frameIndex;
+		uint64_t _frameIndex;
 		HANDLE _fenceEvent;
-		winrt::com_ptr<ID3D12Fence> _fence;
-		uint64_t _fenceValue;
-
-		// Frame
-		Frame* _frameResources[Frames];
-		Frame* _currentFrameResource;
-		uint32_t _currentFrameResourceIndex;
+		std::array<Frame, Frames> _frames;
 
 		auto Flush(
 			winrt::com_ptr<ID3D12CommandQueue> commandQueue,

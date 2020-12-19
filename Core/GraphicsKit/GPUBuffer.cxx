@@ -1,7 +1,7 @@
 #include "pch.hxx"
 #include "GPUBuffer.hxx"
 auto Cyanite::GraphicsKit::GPUBuffer::BindDevice(
-	winrt::com_ptr<ID3D12Device> device
+	Gpu device
 ) -> void {
 	_device = device;
 }

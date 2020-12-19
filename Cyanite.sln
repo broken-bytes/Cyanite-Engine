@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MathKit", "Core\MathKit\Mat
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetworkKit", "Core\NetworkKit\NetworkKit.vcxproj", "{350AEEE0-B9B1-4A88-90D6-68E7D798389C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SystemKit", "Core\SystemKit\SystemKit.vcxproj", "{B390F000-FB93-494E-ABF4-1894BBDD764A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -141,6 +143,18 @@ Global
 		{350AEEE0-B9B1-4A88-90D6-68E7D798389C}.Release|x64.Build.0 = Release|x64
 		{350AEEE0-B9B1-4A88-90D6-68E7D798389C}.Release|x86.ActiveCfg = Release|Win32
 		{350AEEE0-B9B1-4A88-90D6-68E7D798389C}.Release|x86.Build.0 = Release|Win32
+		{B390F000-FB93-494E-ABF4-1894BBDD764A}.Debug|ARM.ActiveCfg = Debug|Win32
+		{B390F000-FB93-494E-ABF4-1894BBDD764A}.Debug|ARM64.ActiveCfg = Debug|Win32
+		{B390F000-FB93-494E-ABF4-1894BBDD764A}.Debug|x64.ActiveCfg = Debug|x64
+		{B390F000-FB93-494E-ABF4-1894BBDD764A}.Debug|x64.Build.0 = Debug|x64
+		{B390F000-FB93-494E-ABF4-1894BBDD764A}.Debug|x86.ActiveCfg = Debug|Win32
+		{B390F000-FB93-494E-ABF4-1894BBDD764A}.Debug|x86.Build.0 = Debug|Win32
+		{B390F000-FB93-494E-ABF4-1894BBDD764A}.Release|ARM.ActiveCfg = Release|Win32
+		{B390F000-FB93-494E-ABF4-1894BBDD764A}.Release|ARM64.ActiveCfg = Release|Win32
+		{B390F000-FB93-494E-ABF4-1894BBDD764A}.Release|x64.ActiveCfg = Release|x64
+		{B390F000-FB93-494E-ABF4-1894BBDD764A}.Release|x64.Build.0 = Release|x64
+		{B390F000-FB93-494E-ABF4-1894BBDD764A}.Release|x86.ActiveCfg = Release|Win32
+		{B390F000-FB93-494E-ABF4-1894BBDD764A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

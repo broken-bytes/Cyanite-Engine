@@ -186,26 +186,7 @@ namespace Cyanite::GraphicsKit {
 
 		_factory = FactoryHandler::CreateFactory();
 
-		if (_useWarpDevice)
-		{
-			com_ptr<IDXGIAdapter> warpAdapter;
-			winrt::check_hresult(_factory->EnumWarpAdapter(IID_PPV_ARGS(warpAdapter.put())));
-
-
-			winrt::check_hresult(D3D12CreateDevice(
-				warpAdapter.get(),
-				D3D_FEATURE_LEVEL_11_0,
-				IID_PPV_ARGS(_device.put())
-			));
-		}
-		else
-		{
-			winrt::check_hresult(D3D12CreateDevice(
-				DeviceHandler::QueryAdapters().get(),
-				MIN_D3D_LVL,
-				IID_PPV_ARGS(_device.put())
-			));
-		}
+		_device = std::make_unique<Gpu>();
 
 		_swapChain = SwapChainHandler::CreateSwapChainFor(
 			_window,

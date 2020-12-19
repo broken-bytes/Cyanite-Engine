@@ -16,7 +16,9 @@
 #include <D3Dcompiler.h>
 #include <DirectXMath.h>
 #include "d3d12shader.h"
+
 #include <thread>
+#include <memory.h>
 
 #include "Config.hxx"
 #include "Helpers.hxx"
