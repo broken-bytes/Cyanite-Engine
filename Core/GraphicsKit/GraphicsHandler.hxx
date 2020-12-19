@@ -10,8 +10,6 @@ namespace Cyanite::GraphicsKit {
 		struct Texture;
 	}
 
-	constexpr D3D_FEATURE_LEVEL MIN_D3D_LVL = D3D_FEATURE_LEVEL_11_1;
-
 	class GraphicsHandler {
 	public:
 		explicit GraphicsHandler(HWND window);

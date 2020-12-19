@@ -167,6 +167,7 @@
     <ClInclude Include="DeviceHandler.hxx" />
     <ClInclude Include="FactoryHandler.hxx" />
     <ClInclude Include="Frame.hxx" />
+    <ClInclude Include="Gpu.hxx" />
     <ClInclude Include="GPUBuffer.hxx" />
     <ClInclude Include="GpuResource.hxx" />
     <ClInclude Include="GraphicsHandler.hxx" />
@@ -186,6 +187,7 @@
     <ClCompile Include="DeviceHandler.cxx" />
     <ClCompile Include="FactoryHandler.cxx" />
     <ClCompile Include="Frame.cxx" />
+    <ClCompile Include="Gpu.cxx" />
     <ClCompile Include="GPUBuffer.cxx" />
     <ClCompile Include="GraphicsHandler.cxx" />
     <ClCompile Include="pch.cxx">

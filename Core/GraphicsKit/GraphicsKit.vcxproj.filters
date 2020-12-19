@@ -81,6 +81,9 @@
     <ClInclude Include="GpuResource.hxx">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Gpu.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DeviceHandler.cxx">
@@ -108,6 +111,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GPUBuffer.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gpu.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
