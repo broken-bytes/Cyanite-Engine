@@ -156,6 +156,7 @@
     <ClInclude Include="Matrix.hxx" />
     <ClInclude Include="pch.hxx" />
     <ClInclude Include="Quaternion.hxx" />
+    <ClInclude Include="Range.hxx" />
     <ClInclude Include="Vector.hxx" />
   </ItemGroup>
   <ItemGroup>

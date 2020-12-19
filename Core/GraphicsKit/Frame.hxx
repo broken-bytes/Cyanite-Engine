@@ -11,7 +11,14 @@ namespace Cyanite::GraphicsKit {
 	class Frame {
 
 	public:
-		Frame(ID3D12Device* pDevice, ID3D12PipelineState* pPso, ID3D12PipelineState* pShadowMapPso, ID3D12DescriptorHeap* pDsvHeap, ID3D12DescriptorHeap* pCbvSrvHeap, D3D12_VIEWPORT* pViewport, UINT frameResourceIndex);
+		Frame(
+			winrt::com_ptr<ID3D12Device> device, 
+			winrt::com_ptr<ID3D12PipelineState> pso,
+			winrt::com_ptr<ID3D12PipelineState> shadowsPso,
+			winrt::com_ptr<ID3D12DescriptorHeap> dspHeap,
+			winrt::com_ptr<ID3D12DescriptorHeap> srcHeap,
+			winrt::com_ptr<D3D12_VIEWPORT> pViewport,
+			UINT frameValue);
 		~Frame();
 
 		auto Commands() const->std::array<

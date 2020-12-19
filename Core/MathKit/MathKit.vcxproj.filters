@@ -27,6 +27,9 @@
     <ClInclude Include="pch.hxx">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Range.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MathKit.cpp">
