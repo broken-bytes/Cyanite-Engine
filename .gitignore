@@ -6,3 +6,5 @@ Release
 Debug
 .pch
 packages
+
+CMakeFiles
