@@ -16,27 +16,15 @@
     <Filter Include="Header Files\Components">
       <UniqueIdentifier>{2c05276a-b227-4ebf-84a8-c4b0a6f758ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Systems">
+      <UniqueIdentifier>{09d12a48-199e-44ec-8004-afeab64e7c21}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="pch.hxx">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DeviceHandler.hxx">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicsHandler.hxx">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SwapChainHandler.hxx">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FactoryHandler.hxx">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CommandQueueHandler.hxx">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TypeConverter.hxx">
@@ -72,9 +60,6 @@
     <ClInclude Include="Helpers.hxx">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CommandAllocatorHandler.hxx">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GPUBuffer.hxx">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -83,6 +68,27 @@
     </ClInclude>
     <ClInclude Include="Gpu.hxx">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandAllocatorHandler.hxx">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandQueueHandler.hxx">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceHandler.hxx">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="FactoryHandler.hxx">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsHandler.hxx">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="SwapChainHandler.hxx">
+      <Filter>Header Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="GpuWorkerThread.hxx">
+      <Filter>Header Files\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
