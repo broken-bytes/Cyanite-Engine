@@ -1,23 +1,16 @@
-class DispatchHandler() {
+import System
+
+class DispatchHandler {
 
     public let `default`: DispatchHandler = DispatchHandler()
 
-    private var dispatchers: [ComponentDispatcher] = []
+    private var dispatchers: [IComponentDispatcher] = []
     private var cores: UInt
 
     private init() {
-        cores = SystemInfo.cpuCount
+        cores = SystemInfo.cpuCount()
         for x in 0...cores-1 {
-            backgroundThread(background: {
-                for y in 0...dispatchers.count {
-                    if y % x == 0 {
-                        dispatchers[y].execute()
-                    }
-                }
-                },
-                completion: {
-                }
-            )
+           // TODO: Split workers across threads
         }
     }
 

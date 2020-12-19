@@ -1,4 +1,4 @@
-class SystemInfo {
+public class SystemInfo {
     // TODO: Get actual core count 
     /**
     * Doc

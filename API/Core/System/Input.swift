@@ -1,7 +1,7 @@
 import Math
 
-class Input {
-    public var mouse: Vector2 { get {}}
+public class Input {
+    public var mouse: Vector2 { get { return Vector2(x: 0, y: 0)}}
 
 
     private func getMouseInput() -> Vector2 {

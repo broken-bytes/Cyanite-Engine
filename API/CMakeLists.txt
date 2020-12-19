@@ -44,3 +44,6 @@ add_subdirectory(Core)
 message("-- Building with sub-modules:")
 message("--   Cassowary rG${CASSOWARY_GIT_REVISION}")
 message("--   Swift/COM rG${SWIFT_COM_GIT_REVISION}")
+
+export(TARGETS EntitySystem System
+    FILE Cyanite.cmake)

@@ -1,5 +1,3 @@
-
-project(EntitySystem)
 set(EntitySystem
 CameraComponent.swift
 Component.swift
@@ -14,12 +12,10 @@ TransformComponent.swift
 )
 
 
-find_package(Math CONFIG QUIET)
-find_package(System CONFIG QUIET)
 
 add_library(EntitySystem SHARED ${EntitySystem})
-target_link_libraries(EntitySystem PUBLIC Math.dll)
-target_link_libraries(EntitySystem PUBLIC System.dll)
+target_link_libraries(EntitySystem PUBLIC Math)
+target_link_libraries(EntitySystem PUBLIC System)
 set_target_properties(EntitySystem PROPERTIES
   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY}
   INTERFACE_LINK_DIRECTORIES $<TARGET_LINKER_FILE_DIR:EntitySystem>)
