@@ -19,6 +19,9 @@
     <Filter Include="Header Files\Systems">
       <UniqueIdentifier>{09d12a48-199e-44ec-8004-afeab64e7c21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Systems">
+      <UniqueIdentifier>{b9eb4d0e-5b38-48b2-9ead-d9e90cfb2c8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -92,28 +95,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DeviceHandler.cxx">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GraphicsHandler.cxx">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SwapChainHandler.cxx">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FactoryHandler.cxx">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CommandQueueHandler.cxx">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Frame.cxx">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CommandAllocatorHandler.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GPUBuffer.cxx">
@@ -121,6 +106,27 @@
     </ClCompile>
     <ClCompile Include="Gpu.cxx">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandAllocatorHandler.cxx">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandQueueHandler.cxx">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceHandler.cxx">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="FactoryHandler.cxx">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsHandler.cxx">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="SwapChainHandler.cxx">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="GpuWorkerThread.cxx">
+      <Filter>Source Files\Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

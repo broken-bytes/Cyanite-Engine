@@ -190,6 +190,7 @@
     <ClCompile Include="Frame.cxx" />
     <ClCompile Include="Gpu.cxx" />
     <ClCompile Include="GPUBuffer.cxx" />
+    <ClCompile Include="GpuWorkerThread.cxx" />
     <ClCompile Include="GraphicsHandler.cxx" />
     <ClCompile Include="pch.cxx">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
