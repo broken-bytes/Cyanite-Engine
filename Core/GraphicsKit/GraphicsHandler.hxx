@@ -41,6 +41,7 @@ namespace Cyanite::GraphicsKit {
 		float _aspectRatio;
 		bool _useWarpDevice;
 		HWND _window;
+		Types::DisplayMode _displayMode;
 
 		// Pipeline objects.
 		CD3DX12_VIEWPORT _viewport;
@@ -48,18 +49,24 @@ namespace Cyanite::GraphicsKit {
 		winrt::com_ptr<IDXGIFactory7> _factory;
 		winrt::com_ptr<IDXGISwapChain4> _swapChain;
 		std::unique_ptr<Gpu> _device;
+
+
 		std::array<winrt::com_ptr<ID3D12Resource>, Frames> _renderTargets;
-		winrt::com_ptr<ID3D12CommandAllocator> _commandAllocator;
-		winrt::com_ptr<ID3D12CommandQueue> _commandQueue;
-		winrt::com_ptr<ID3D12RootSignature> _rootSignature;
+		std::array<winrt::com_ptr<ID3D12CommandAllocator>, Frames> _allocs;
+		std::array<winrt::com_ptr<ID3D12CommandQueue>, Frames> _queues;
+		std::array<winrt::com_ptr<ID3D12GraphicsCommandList>, Frames> _lists;
+		
+		std::array<winrt::com_ptr<ID3D12Fence1>, Frames> _fences;
+		std::array<uint64_t, Frames> _fenceValues;
+		uint64_t _frameIndex;
+		uint64_t _rtvDescriptorSize;
+		HANDLE _fenceEvent;
+		
 		winrt::com_ptr<ID3D12DescriptorHeap> _rtvHeap;
-		winrt::com_ptr<ID3D12DescriptorHeap> _dsvHeap;
-		winrt::com_ptr<ID3D12DescriptorHeap> _cbvSrvHeap;
-		winrt::com_ptr<ID3D12DescriptorHeap> _samplerHeap;
+		
+		winrt::com_ptr<ID3D12RootSignature> _rootSignature;
 		winrt::com_ptr<ID3D12PipelineState> _pipelineState;
 		winrt::com_ptr<ID3D12PipelineState> _pipelineStateShadowMap;
-		winrt::com_ptr<ID3D12GraphicsCommandList> _commandList;
-		winrt::com_ptr<ID3D12GraphicsCommandList> _textureUploadList;
 
 		// App resources.
 		D3D12_VERTEX_BUFFER_VIEW _vertexBufferView;
@@ -71,17 +78,8 @@ namespace Cyanite::GraphicsKit {
 		winrt::com_ptr<ID3D12Resource> _vertexBuffer;
 		winrt::com_ptr<ID3D12Resource> _vertexBufferUpload;
 		winrt::com_ptr<ID3D12Resource> _depthStencil;
-		UINT _rtvDescriptorSize;
 
-		// Synchronization objects.
-		HANDLE _workerBeginRenderFrame[Frames];
-		HANDLE _workerFinishShadowPass[Frames];
-		HANDLE _workerFinishedRenderFrame[Frames];
-		HANDLE _threadHandles[Frames];
-		uint64_t _frameIndex;
-		HANDLE _fenceEvent;
-		std::array<Frame, Frames> _frames;
-
+		auto SetDebugMode() -> void;
 		auto Flush(
 			winrt::com_ptr<ID3D12CommandQueue> commandQueue,
 			winrt::com_ptr<ID3D12Fence> fence,
@@ -92,7 +90,9 @@ namespace Cyanite::GraphicsKit {
 		auto FrameStart() -> void;
 		auto FrameMid() const -> void;
 		auto FrameEnd() -> void;
+		auto UpdatePipeline() -> void;
 
+		
 		auto SetDefaultPipeline(winrt::com_ptr<ID3D12GraphicsCommandList> commands) -> void;
 		auto LoadPipeline() -> void;
 		auto LoadAssets() -> void;
@@ -114,7 +114,7 @@ namespace Cyanite::GraphicsKit {
 			std::vector<Components::Texture> textures 
 		) -> void;
 		auto PopulateCommandList() -> void;
-		auto AwaitGpuCompletion() -> void;
+		auto AwaitFrameCompletion() -> void;
 
 		auto Worker(uint8_t id) -> void;
 	};

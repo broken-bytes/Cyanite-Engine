@@ -93,6 +93,12 @@
     <ClInclude Include="GpuWorkerThread.hxx">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="Heap.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UiWorkerThread.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cxx">
@@ -127,6 +133,12 @@
     </ClCompile>
     <ClCompile Include="GpuWorkerThread.cxx">
       <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Heap.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UiWorkerThread.cxx">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

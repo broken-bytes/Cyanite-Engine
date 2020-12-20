@@ -1,8 +1,11 @@
 #pragma once
 #include "pch.hxx"
 
-#include "../MathKit/Vector.hxx"
-
-namespace Cyanite::MathKit::Types {
-
+namespace Cyanite::GraphicsKit::Types {
+	enum class DisplayMode {
+		Windowed,
+		WindowedBorderless,
+		Fullscreen,
+		ExclusiveFullscreen
+	};
 }

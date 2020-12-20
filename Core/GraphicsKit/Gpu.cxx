@@ -16,6 +16,35 @@ namespace Cyanite::GraphicsKit {
 		_device = nullptr;
 	}
 
+	auto Gpu::CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE type,
+		D3D12_COMMAND_QUEUE_PRIORITY priority) -> winrt::com_ptr<ID3D12CommandQueue> {
+		winrt::com_ptr<ID3D12CommandAllocator> alloc;
+		winrt::check_hresult(
+			_device->CreateCommandAllocator(
+				type, IID_PPV_ARGS(alloc.put())
+			)
+		);
+		return alloc;
+	}
+
+
+	auto Gpu::CreateCommandList(
+		winrt::com_ptr<ID3D12CommandAllocator> alloc,
+		D3D12_COMMAND_LIST_TYPE type
+	)
+		-> winrt::com_ptr<ID3D12GraphicsCommandList> {
+		winrt::com_ptr<ID3D12GraphicsCommandList6> list;
+		winrt::check_hresult(
+			_device->CreateCommandList(
+				0,
+				type,
+				alloc.get(),
+				nullptr,
+				IID_PPV_ARGS(list.put())
+			)
+		);
+	}
+
 	auto Gpu::CreateCommandQueue(
 		D3D12_COMMAND_LIST_TYPE type,
 		D3D12_COMMAND_QUEUE_PRIORITY priority
@@ -36,10 +65,17 @@ namespace Cyanite::GraphicsKit {
 		return queue;
 	}
 
-	auto Gpu::CreateCommandList(D3D12_COMMAND_LIST_TYPE type)
-		-> winrt::com_ptr<ID3D12GraphicsCommandList> {
-		winrt::com_ptr<ID3D12GraphicsCommandList6> list;
-		winrt::check_hresult(_device->CreateCommandList(0, type, ))
-	}
+	auto Gpu::CreateFence(uint64_t value) -> winrt::com_ptr<ID3D12Fence1> {
+		winrt::com_ptr<ID3D12Fence1> fence;
 
+		winrt::check_hresult(
+			_device->CreateFence(
+				value,
+				D3D12_FENCE_FLAG_NONE,
+				IID_PPV_ARGS(fence.put())
+			)
+		);
+
+		return fence;
+	}
 }
