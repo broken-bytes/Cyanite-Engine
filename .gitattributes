@@ -1,12 +1,12 @@
 *.hxx linguist-language=C++
 *.cxx linguist-language=C++
 *.swift linguist-language=Swift
-*.vcxproj -linguist-vendored
-*.vcxproj.* -linguist-vendored
-*.sln -linguist-vendored
-*.md -linguist-vendored
-*.cmake -linguist-vendored
-*.h -linguist-vendored
-*.c -linguist-vendored
+*.vcxproj linguist-vendored
+*.vcxproj.* linguist-vendored
+*.sln linguist-vendored
+*.md linguist-vendored
+*.cmake linguist-vendored
+*.h linguist-vendored
+*.c linguist-vendored
 *.txt linguist-vendored
 
