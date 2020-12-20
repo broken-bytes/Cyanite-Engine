@@ -35,7 +35,7 @@ namespace Cyanite::MathKit::Types {
 		}
 
 		auto operator!=(const Quaternion& rhs) -> bool {
-			return !(this == rhs);
+			return !(*this == rhs);
 		}
 
 		auto Magnitude() const -> float {
