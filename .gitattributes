@@ -8,4 +8,5 @@
 *.sln -linguist-vendored
 *.md -linguist-vendored
 *.cmake -linguist-vendored
+Core/Input* linguist-vendored
 
