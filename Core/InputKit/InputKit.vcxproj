@@ -22,7 +22,6 @@
     <ClInclude Include="pch.hxx" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="InputKit.cxx" />
     <ClCompile Include="pch.cxx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

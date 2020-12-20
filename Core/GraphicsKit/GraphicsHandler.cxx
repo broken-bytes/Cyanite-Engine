@@ -9,8 +9,7 @@ namespace Cyanite::GraphicsKit {
 	auto GraphicsHandler::Initialize() -> void {
 		_lists = {};
 		_allocs = {};
-		_queues = {};
-		_queues[0] = _device->CreateCommandQueue();
+		_queue = _device->CreateCommandQueue();
 
 		for (uint8_t x = 0; x < Frames; x++) {
 			_allocs[x] = _device->CreateCommandAllocator();
@@ -18,6 +17,7 @@ namespace Cyanite::GraphicsKit {
 			_fenceValues[x] = 0;
 		}
 		_lists[0] = _device->CreateCommandList(_allocs[0]);
+		_lists[1] = _device->CreateCommandList(_allocs[0]);
 		_fenceEvent = CreateEvent(
 			nullptr,
 			false,
@@ -41,9 +41,7 @@ namespace Cyanite::GraphicsKit {
 
 
 		_swapChain = nullptr;
-		for(int x = 0; x < _queues.size(); x++) {
-			_queues[x] = nullptr;
-		}
+		_queue = nullptr;
 		for (int x = 0; x < _lists.size(); x++) {
 			_lists[x] = nullptr;
 		}
@@ -61,19 +59,19 @@ namespace Cyanite::GraphicsKit {
 	auto GraphicsHandler::Update() -> void {}
 	auto GraphicsHandler::Render() -> void {
 		UpdatePipeline();
-		
+
 		std::vector<ID3D12CommandList*> lists(_lists.size());
-		for(auto list: _lists) {
+		for (auto list : _lists) {
 			lists.emplace_back(list);
 		}
 
-		_queues[0]->ExecuteCommandLists(
+		_queue->ExecuteCommandLists(
 			_lists.size(),
 			lists.data()
 		);
 
 		winrt::check_hresult(
-			_queues[0]->Signal(
+			_queue->Signal(
 				_fences[_frameIndex].get(),
 				_fenceValues[_frameIndex]
 			)
@@ -164,7 +162,7 @@ namespace Cyanite::GraphicsKit {
 		// swap the current rtv buffer index so we draw on the correct buffer
 		_frameIndex = _swapChain->GetCurrentBackBufferIndex();
 
-		if (_fences[_frameIndex]->GetCompletedValue() < 
+		if (_fences[_frameIndex]->GetCompletedValue() <
 			_fenceValues[_frameIndex])
 		{
 			winrt::check_hresult(

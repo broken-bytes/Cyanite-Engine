@@ -23,8 +23,5 @@
     <ClCompile Include="pch.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NetworkKit.cxx">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
