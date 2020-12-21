@@ -19,6 +19,7 @@
 
 #include <thread>
 #include <memory.h>
+#include <queue>
 
 #include "Config.hxx"
 #include "Helpers.hxx"

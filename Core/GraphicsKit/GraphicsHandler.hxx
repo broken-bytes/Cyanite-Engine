@@ -49,14 +49,10 @@ namespace Cyanite::GraphicsKit {
 
 		std::array<winrt::com_ptr<ID3D12Resource>, Frames> _renderTargets;
 		std::array<winrt::com_ptr<ID3D12CommandAllocator>, Frames> _allocs;
-		winrt::com_ptr<ID3D12CommandQueue> _queue;
 		std::array<winrt::com_ptr<ID3D12GraphicsCommandList>, Frames> _lists;
-		
-		std::array<winrt::com_ptr<ID3D12Fence1>, Frames> _fences;
-		std::array<uint64_t, Frames> _fenceValues;
-		uint64_t _frameIndex;
+
 		uint64_t _rtvDescriptorSize;
-		HANDLE _fenceEvent;
+		
 		
 		winrt::com_ptr<ID3D12DescriptorHeap> _rtvHeap;
 		

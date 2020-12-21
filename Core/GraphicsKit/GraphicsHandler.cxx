@@ -5,32 +5,20 @@
 namespace Cyanite::GraphicsKit {
 	GraphicsHandler::GraphicsHandler(HWND window) {
 		_device = std::make_unique<Gpu>();
-		_queue = nullptr;
 	}
 	GraphicsHandler::~GraphicsHandler() {}
 	auto GraphicsHandler::Initialize() -> void {
-		_queue = _device->CreateCommandQueue();
 
 		for (uint8_t x = 0; x < Frames; x++) {
 			_allocs[x] = _device->CreateCommandAllocator();
-			_fences[x] = _device->CreateFence();
-			_fenceValues[x] = 0;
 		}
 		_lists[0] = _device->CreateCommandList(_allocs[0]);
 		_lists[1] = _device->CreateCommandList(_allocs[0]);
-		_fenceEvent = CreateEvent(
-			nullptr,
-			false,
-			false,
-			nullptr
-		);
-
 	}
 	auto GraphicsHandler::Deinitialize() -> void {
 		// wait for the gpu to finish all frames
 		for (int x = 0; x < Frames; ++x)
 		{
-			_frameIndex = x;
 			AwaitFrameCompletion();
 		}
 
@@ -39,9 +27,8 @@ namespace Cyanite::GraphicsKit {
 		if (_swapChain->GetFullscreenState(&fs, nullptr))
 			_swapChain->SetFullscreenState(false, nullptr);
 
-
+		delete _device.release();
 		_swapChain = nullptr;
-		_queue = nullptr;
 		for (int x = 0; x < _lists.size(); x++) {
 			_lists[x] = nullptr;
 		}
@@ -52,35 +39,13 @@ namespace Cyanite::GraphicsKit {
 		{
 			_renderTargets[x] = nullptr;
 			_allocs[x] = nullptr;
-			_fences[x] = nullptr;
 		};
 	}
 
 	auto GraphicsHandler::Update() -> void {}
 	auto GraphicsHandler::Render() -> void {
 		UpdatePipeline();
-
-		std::vector<ID3D12CommandList*> lists(_lists.size());
-		for (auto item : _lists) {
-
-			winrt::com_ptr<ID3D12CommandList> temp;
-			lists.emplace_back(
-				*static_cast<ID3D12CommandList*>(item.get())
-			);
-
-		}
-
-		_queue->ExecuteCommandLists(
-			lists.size(),
-			lists.data()
-		);
-
-		winrt::check_hresult(
-			_queue->Signal(
-				_fences[_frameIndex].get(),
-				_fenceValues[_frameIndex]
-			)
-		);
+		_device->ExecuteDirect(_lists);
 
 		winrt::check_hresult(_swapChain->Present(0, 0));
 	}
@@ -96,16 +61,16 @@ namespace Cyanite::GraphicsKit {
 	auto GraphicsHandler::UpdatePipeline() -> void {
 		AwaitFrameCompletion();
 
-		winrt::check_hresult(_allocs[_frameIndex]->Reset());
+		winrt::check_hresult(_allocs[_device->FrameIndex()]->Reset());
 		winrt::check_hresult(
 			_lists[0]->Reset(
-				_allocs[_frameIndex].get(),
+				_allocs[_device->FrameIndex()].get(),
 				nullptr
 			)
 		);
 
 		auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-			_renderTargets[_frameIndex].get(),
+			_renderTargets[_device->FrameIndex()].get(),
 			D3D12_RESOURCE_STATE_PRESENT,
 			D3D12_RESOURCE_STATE_RENDER_TARGET
 		);
@@ -116,7 +81,7 @@ namespace Cyanite::GraphicsKit {
 		);
 		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(
 			_rtvHeap->GetCPUDescriptorHandleForHeapStart(),
-			_frameIndex,
+			_device->FrameIndex(),
 			_rtvDescriptorSize
 		);
 		_lists[0]->OMSetRenderTargets(
@@ -136,7 +101,7 @@ namespace Cyanite::GraphicsKit {
 
 
 		barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-			_renderTargets[_frameIndex].get(),
+			_renderTargets[_device->FrameIndex()].get(),
 			D3D12_RESOURCE_STATE_RENDER_TARGET,
 			D3D12_RESOURCE_STATE_PRESENT
 		);

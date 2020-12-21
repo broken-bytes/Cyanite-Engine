@@ -22,6 +22,9 @@
     <Filter Include="Source Files\Systems">
       <UniqueIdentifier>{b9eb4d0e-5b38-48b2-9ead-d9e90cfb2c8b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{53af6dad-3070-419f-927b-c72e34fd6113}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -93,6 +96,12 @@
     <ClInclude Include="UiWorkerThread.hxx">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="View.hxx">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.hxx">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cxx">
@@ -127,6 +136,9 @@
     </ClCompile>
     <ClCompile Include="UiWorkerThread.cxx">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="View.cxx">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
