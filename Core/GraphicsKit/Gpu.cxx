@@ -2,6 +2,7 @@
 #include "Gpu.hxx"
 
 #include "DeviceHandler.hxx"
+#include "FactoryHandler.hxx"
 #include "SwapChainHandler.hxx"
 namespace Cyanite::GraphicsKit {
 	Gpu::Gpu(HWND window) {
@@ -16,14 +17,8 @@ namespace Cyanite::GraphicsKit {
 		_directQueue = CreateCommandQueue();
 		_copyQueue = CreateCommandQueue(D3D12_COMMAND_LIST_TYPE_COPY);
 		_computeQueue = CreateCommandQueue(D3D12_COMMAND_LIST_TYPE_COMPUTE);
-		_bundleQueue = CreateCommandQueue(D3D12_COMMAND_LIST_TYPE_BUNDLE);
 
-		for (uint8_t x = 0; x < Frames; x++) {
-			_fences[x] = CreateFence();
-			_fenceValues[x] = 0;
-		}
-
-		for(uint8_t x = 0; x < CommandQueues; x++) {
+		for (uint8_t x = 0; x < CommandQueues; x++) {
 			_fenceEvent[x] = CreateEvent(
 				nullptr,
 				false,
@@ -32,6 +27,60 @@ namespace Cyanite::GraphicsKit {
 			);
 		}
 		_swapChain = CreateSwapChain(_window);
+		FactoryHandler::CreateFactory()->MakeWindowAssociation(
+			_window,
+			DXGI_MWA_NO_ALT_ENTER
+		);
+
+		_frameIndex = _swapChain->GetCurrentBackBufferIndex();
+
+		_rtvHeap = CreateDescriptorHeap(
+			D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
+			Frames
+		);
+		
+		_rtvSize = _device->GetDescriptorHandleIncrementSize(
+			D3D12_DESCRIPTOR_HEAP_TYPE_RTV
+		);
+		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(
+			_rtvHeap->GetCPUDescriptorHandleForHeapStart()
+		);
+		
+		for (int x = 0; x < Frames; x++)
+		{
+			winrt::check_hresult(
+				_swapChain->GetBuffer(
+					x,
+					IID_PPV_ARGS(_renderTargets[x].put())
+				)
+			);
+			_device->CreateRenderTargetView(
+				_renderTargets[x].get(),
+				nullptr,
+				rtvHandle
+			);
+			rtvHandle.Offset(1, _rtvSize);
+		}
+
+		for (int x = 0; x < Frames; x++)
+		{
+			winrt::check_hresult(
+				_device->CreateFence(
+					0,
+					D3D12_FENCE_FLAG_NONE,
+					IID_PPV_ARGS(_fences[x].put())
+				)
+			);
+			_fenceValues[x] = 0;
+		}
+		_fenceEvent[0] = CreateEvent(
+			nullptr,
+			false,
+			false,
+			nullptr
+		);
+
+		_directAlloc = CreateCommandAllocator();
 	}
 
 	Gpu::~Gpu() {
@@ -48,7 +97,7 @@ namespace Cyanite::GraphicsKit {
 	}
 
 	auto Gpu::CreateSwapChain(std::optional<HWND> handle) -> winrt::com_ptr<IDXGISwapChain4> {
-		if(handle.has_value()) {
+		if (handle.has_value()) {
 			return SwapChainHandler::CreateSwapChainFor(
 				handle.value(),
 				_directQueue
@@ -58,8 +107,9 @@ namespace Cyanite::GraphicsKit {
 	}
 
 	auto Gpu::CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE type,
-	                                 D3D12_COMMAND_QUEUE_PRIORITY priority) -> winrt::com_ptr<ID3D12CommandAllocator> {
+		D3D12_COMMAND_QUEUE_PRIORITY priority) -> winrt::com_ptr<ID3D12CommandAllocator> {
 		winrt::com_ptr<ID3D12CommandAllocator> alloc;
+		GetError();
 		winrt::check_hresult(
 			_device->CreateCommandAllocator(
 				type, IID_PPV_ARGS(alloc.put())
@@ -108,6 +158,114 @@ namespace Cyanite::GraphicsKit {
 		return queue;
 	}
 
+	auto Gpu::CreateDescriptorHeap(
+		D3D12_DESCRIPTOR_HEAP_TYPE type,
+		uint32_t numDescriptors
+	) -> winrt::com_ptr<ID3D12DescriptorHeap> {
+		D3D12_DESCRIPTOR_HEAP_DESC rtv = {};
+		winrt::com_ptr<ID3D12DescriptorHeap> heap;
+		rtv.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+		rtv.NumDescriptors = Frames;
+		rtv.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+		winrt::check_hresult(
+			_device->CreateDescriptorHeap(
+				&rtv,
+				IID_PPV_ARGS(heap.put())
+			)
+		);
+
+		return heap;
+	}
+
+	auto Gpu::DrawRtvs() -> void {
+		auto rtvDescriptorSize = _device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+
+		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(
+			_rtvHeap->GetCPUDescriptorHandleForHeapStart()
+		);
+
+		for (int x = 0; x < Frames; ++x)
+		{
+			winrt::com_ptr<ID3D12Resource> backBuffer;
+			winrt::check_hresult(
+				_swapChain->GetBuffer(x,
+					IID_PPV_ARGS(backBuffer.put())
+				)
+			);
+
+			_device->CreateRenderTargetView(backBuffer.get(), nullptr, rtvHandle);
+
+			_buffers[x] = backBuffer;
+
+			rtvHandle.Offset(rtvDescriptorSize);
+		}
+
+	}
+
+	auto Gpu::Draw() -> void {
+		winrt::check_hresult(_swapChain->Present(0, 0));
+	}
+
+	auto Gpu::Update(winrt::com_ptr<ID3D12GraphicsCommandList> list) -> void {
+		Wait();
+		auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+			_renderTargets[FrameIndex()].get(),
+			D3D12_RESOURCE_STATE_PRESENT,
+			D3D12_RESOURCE_STATE_RENDER_TARGET
+		);
+
+		list->ResourceBarrier(
+			1,
+			&barrier
+		);
+		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(
+			_rtvHeap->GetCPUDescriptorHandleForHeapStart(),
+			FrameIndex(),
+			_rtvSize
+		);
+		list->OMSetRenderTargets(
+			1,
+			&rtvHandle,
+			false,
+			nullptr
+		);
+
+		float color[] = { 0,0,0,0 };
+		list->ClearRenderTargetView(
+			rtvHandle,
+			color,
+			0,
+			nullptr
+		);
+
+
+		barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+			_renderTargets[FrameIndex()].get(),
+			D3D12_RESOURCE_STATE_RENDER_TARGET,
+			D3D12_RESOURCE_STATE_PRESENT
+		);
+		list->ResourceBarrier(
+			1,
+			&barrier
+		);
+
+		list->Close();
+	}
+
+	auto Gpu::Signal(
+		winrt::com_ptr<ID3D12CommandQueue> commandQueue,
+		winrt::com_ptr<ID3D12Fence> fence
+	) -> uint64_t {
+		uint64_t fenceValueForSignal = ++_fenceValues[_frameIndex];
+		winrt::check_hresult(
+			commandQueue->Signal(
+				fence.get(),
+				fenceValueForSignal)
+		);
+
+		return fenceValueForSignal;
+	}
+
 	auto Gpu::CreateFence(uint64_t value) -> winrt::com_ptr<ID3D12Fence1> {
 		winrt::com_ptr<ID3D12Fence1> fence;
 
@@ -122,27 +280,34 @@ namespace Cyanite::GraphicsKit {
 		return fence;
 	}
 
-	auto Gpu::ExecuteDirect(std::array<winrt::com_ptr<ID3D12GraphicsCommandList>, Frames> lists) -> void {
+	auto Gpu::ExecuteDirect(
+		std::vector<winrt::com_ptr<ID3D12GraphicsCommandList>> lists
+	) -> void {
 		ExecuteCommandLists(lists, D3D12_COMMAND_LIST_TYPE_DIRECT);
 	}
-	auto Gpu::ExecuteCopy(std::array<winrt::com_ptr<ID3D12GraphicsCommandList>, Frames> lists) -> void {
+	auto Gpu::ExecuteCopy(
+		std::vector<winrt::com_ptr<ID3D12GraphicsCommandList>> lists
+	) -> void {
 		ExecuteCommandLists(lists, D3D12_COMMAND_LIST_TYPE_COPY);
 	}
 	auto Gpu::ExecuteCompute(
-		std::array<winrt::com_ptr<ID3D12GraphicsCommandList>,
-		Frames> lists) -> void {
+		std::vector<winrt::com_ptr<ID3D12GraphicsCommandList>> lists
+	) -> void {
 		ExecuteCommandLists(lists, D3D12_COMMAND_LIST_TYPE_COMPUTE);
 	}
-	auto Gpu::ExecuteBundle(std::array<winrt::com_ptr<ID3D12GraphicsCommandList>, Frames> lists) -> void {
+	auto Gpu::ExecuteBundle(
+		std::vector<winrt::com_ptr<ID3D12GraphicsCommandList>> lists
+	) -> void {
 		ExecuteCommandLists(lists, D3D12_COMMAND_LIST_TYPE_BUNDLE);
 	}
 
 	auto Gpu::Wait() -> void {
 		_frameIndex = _swapChain->GetCurrentBackBufferIndex();
 
-		if (_fences[_frameIndex]->GetCompletedValue() <
-			_fenceValues[_frameIndex])
-		{
+		if (
+			_fences[_frameIndex]->GetCompletedValue() <
+			_fenceValues[_frameIndex]
+			) {
 			winrt::check_hresult(
 				_fences[_frameIndex]->SetEventOnCompletion(
 					_fenceValues[_frameIndex],
@@ -155,49 +320,37 @@ namespace Cyanite::GraphicsKit {
 		_fenceValues[_frameIndex]++;
 	}
 
+	auto Gpu::GetError() -> void {
+		auto reason = _device->GetDeviceRemovedReason();
+#if defined(_DEBUG)
+		wchar_t outString[100];
+		size_t size = 100;
+		swprintf_s(outString, size, L"Device removed! DXGI_ERROR code: 0x%X\n", reason);
+		OutputDebugStringW(outString);
+#endif
+	}
+
 	auto Gpu::ExecuteCommandLists(
-		std::array<winrt::com_ptr<ID3D12GraphicsCommandList>, Frames> lists,
+		std::vector<winrt::com_ptr<ID3D12GraphicsCommandList>> lists,
 		D3D12_COMMAND_LIST_TYPE type
 	) -> void {
 
-		ID3D12CommandList** raw = new ID3D12CommandList*[lists.size()];
+
+		std::vector<ID3D12CommandList*> raw;
+
 		for (int x = 0; x < lists.size(); x++) {
-			raw[x] = static_cast<ID3D12CommandList*>(lists[x].get());
+			raw.emplace_back(lists[x].get());
 		}
+		;
 
-		ID3D12CommandQueue* temp;
-		uint8_t fenceEvent;
-
-		
-		switch (type) {
-		case D3D12_COMMAND_LIST_TYPE_DIRECT:
-			temp = _directQueue.get();
-			fenceEvent = 0;
-			break;
-		case D3D12_COMMAND_LIST_TYPE_BUNDLE:
-			temp = _bundleQueue.get();
-			fenceEvent = 3;
-			break;
-		case D3D12_COMMAND_LIST_TYPE_COMPUTE:
-			temp = _computeQueue.get();
-			fenceEvent = 2;
-			break;
-		case D3D12_COMMAND_LIST_TYPE_COPY:
-			temp = _copyQueue.get();
-			fenceEvent = 1;
-			break;
-		default:
-			temp = _directQueue.get();
-			fenceEvent = 0;
-		}
-
-		temp->ExecuteCommandLists(
+		_directQueue->ExecuteCommandLists(
 			lists.size(),
-			raw
+			raw.data()
 		);
 
+
 		winrt::check_hresult(
-			temp->Signal(
+			_directQueue->Signal(
 				_fences[_frameIndex].get(),
 				_fenceValues[_frameIndex]
 			)

@@ -34,25 +34,33 @@ namespace Cyanite::GraphicsKit {
 		[[nodiscard]] auto CreateFence(uint64_t value = 0)->winrt::com_ptr<ID3D12Fence1>;
 
 		auto ExecuteDirect(
-			std::array<winrt::com_ptr<ID3D12GraphicsCommandList>, Frames> lists
+			std::vector<winrt::com_ptr<ID3D12GraphicsCommandList>> lists
 		) -> void;
 		auto ExecuteCopy(
-			std::array<winrt::com_ptr<ID3D12GraphicsCommandList>, Frames> lists
+			std::vector<winrt::com_ptr<ID3D12GraphicsCommandList>> lists
 		) -> void;
 		auto ExecuteCompute(
-			std::array<winrt::com_ptr<ID3D12GraphicsCommandList>, Frames> lists
+			std::vector<winrt::com_ptr<ID3D12GraphicsCommandList>> lists
 		) -> void;
 		auto ExecuteBundle(
-			std::array<winrt::com_ptr<ID3D12GraphicsCommandList>, Frames> lists
+			std::vector<winrt::com_ptr<ID3D12GraphicsCommandList>> lists
 		) -> void;
 
 		auto Wait() -> void;
+
+		auto GetError() -> void;
+
+		auto Update(winrt::com_ptr<ID3D12GraphicsCommandList> list) -> void;
 		
 	private:
 		GraphicsDevice _device;
 		HWND _window;
 		winrt::com_ptr<IDXGISwapChain4> _swapChain;
-
+		winrt::com_ptr<ID3D12DescriptorHeap> _rtvHeap;
+		uint64_t _rtvSize;
+		std::array<winrt::com_ptr<ID3D12Resource>, Frames> _renderTargets;
+		std::array<winrt::com_ptr<ID3D12Resource>, Frames> _buffers;
+		
 		std::array<winrt::com_ptr<ID3D12Fence1>, Frames> _fences;
 		std::array<uint64_t, Frames> _fenceValues;
 		uint64_t _frameIndex;
@@ -64,8 +72,10 @@ namespace Cyanite::GraphicsKit {
 		winrt::com_ptr<ID3D12CommandQueue> _computeQueue;
 		winrt::com_ptr<ID3D12CommandQueue> _bundleQueue;
 
+		winrt::com_ptr<ID3D12CommandAllocator> _directAlloc;
+
 		auto ExecuteCommandLists(
-			std::array<winrt::com_ptr<ID3D12GraphicsCommandList>, Frames> lists,
+			std::vector<winrt::com_ptr<ID3D12GraphicsCommandList>> lists,
 			D3D12_COMMAND_LIST_TYPE type
 		) -> void;
 	
@@ -75,5 +85,19 @@ namespace Cyanite::GraphicsKit {
 			D3D12_COMMAND_QUEUE_PRIORITY priority =
 			D3D12_COMMAND_QUEUE_PRIORITY_NORMAL
 		)->winrt::com_ptr<ID3D12CommandQueue>;
+
+		auto CreateDescriptorHeap(
+			D3D12_DESCRIPTOR_HEAP_TYPE type,
+			uint32_t numDescriptors
+		)->winrt::com_ptr<ID3D12DescriptorHeap>;
+
+		
+		// Drawing ----
+		auto DrawRtvs() -> void;
+		auto Draw() -> void;
+		auto Signal(
+			winrt::com_ptr<ID3D12CommandQueue> commandQueue,
+			winrt::com_ptr<ID3D12Fence> fence) -> uint64_t;
+		////
 	};
 }

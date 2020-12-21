@@ -53,7 +53,7 @@ namespace Cyanite::GraphicsKit::SwapChainHandler {
 		swapChainDesc.BufferCount = Frames;
 
 		winrt::com_ptr<IDXGISwapChain1> swapChain;
-
+		
 		auto factory = FactoryHandler::CreateFactory();
 		winrt::check_hresult(
 			factory->CreateSwapChainForHwnd(
