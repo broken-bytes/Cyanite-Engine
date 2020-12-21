@@ -80,7 +80,9 @@ namespace Cyanite::GraphicsKit {
 			nullptr
 		);
 
-		_directAlloc = CreateCommandAllocator();
+		for(int x = 0; x < _directAlloc.size(); x++) {
+			_directAlloc[x] = CreateCommandAllocator();
+		}
 	}
 
 	Gpu::~Gpu() {
@@ -109,7 +111,6 @@ namespace Cyanite::GraphicsKit {
 	auto Gpu::CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE type,
 		D3D12_COMMAND_QUEUE_PRIORITY priority) -> winrt::com_ptr<ID3D12CommandAllocator> {
 		winrt::com_ptr<ID3D12CommandAllocator> alloc;
-		GetError();
 		winrt::check_hresult(
 			_device->CreateCommandAllocator(
 				type, IID_PPV_ARGS(alloc.put())
@@ -208,6 +209,15 @@ namespace Cyanite::GraphicsKit {
 
 	auto Gpu::Update(winrt::com_ptr<ID3D12GraphicsCommandList> list) -> void {
 		Wait();
+
+		winrt::check_hresult(_directAlloc[_frameIndex]->Reset());
+		winrt::check_hresult(
+			list->Reset(
+				_directAlloc[_frameIndex].get(),
+				nullptr
+			)
+		);
+		
 		auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(
 			_renderTargets[FrameIndex()].get(),
 			D3D12_RESOURCE_STATE_PRESENT,
@@ -249,7 +259,7 @@ namespace Cyanite::GraphicsKit {
 			&barrier
 		);
 
-		list->Close();
+		winrt::check_hresult(list->Close());
 	}
 
 	auto Gpu::Signal(
@@ -302,8 +312,6 @@ namespace Cyanite::GraphicsKit {
 	}
 
 	auto Gpu::Wait() -> void {
-		_frameIndex = _swapChain->GetCurrentBackBufferIndex();
-
 		if (
 			_fences[_frameIndex]->GetCompletedValue() <
 			_fenceValues[_frameIndex]
@@ -318,6 +326,7 @@ namespace Cyanite::GraphicsKit {
 			WaitForSingleObject(_fenceEvent[0], INFINITE);
 		}
 		_fenceValues[_frameIndex]++;
+		_frameIndex = _swapChain->GetCurrentBackBufferIndex();
 	}
 
 	auto Gpu::GetError() -> void {
@@ -328,6 +337,10 @@ namespace Cyanite::GraphicsKit {
 		swprintf_s(outString, size, L"Device removed! DXGI_ERROR code: 0x%X\n", reason);
 		OutputDebugStringW(outString);
 #endif
+	}
+
+	auto Gpu::DirectAlloc(uint8_t threadId, uint64_t frameId) -> winrt::com_ptr<ID3D12CommandAllocator> {
+		return _directAlloc[frameId];
 	}
 
 	auto Gpu::ExecuteCommandLists(

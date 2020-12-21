@@ -48,7 +48,7 @@ namespace Cyanite::GraphicsKit {
 
 
 		std::array<winrt::com_ptr<ID3D12Resource>, Frames> _renderTargets;
-		std::array<winrt::com_ptr<ID3D12CommandAllocator>, Frames> _allocs;
+		//std::array<winrt::com_ptr<ID3D12CommandAllocator>, Frames> _allocs;
 		winrt::com_ptr<ID3D12GraphicsCommandList> _list;
 
 		uint64_t _rtvDescriptorSize;

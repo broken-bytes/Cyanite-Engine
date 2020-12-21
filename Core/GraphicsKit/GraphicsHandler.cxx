@@ -6,18 +6,17 @@ namespace Cyanite::GraphicsKit {
 	GraphicsHandler::GraphicsHandler(HWND window) {
 		SetDebugMode();
 		_device = std::make_unique<Gpu>(window);
-		_device->GetError();
-		auto t = "";
 	}
 	GraphicsHandler::~GraphicsHandler() {}
 	auto GraphicsHandler::Initialize() -> void {
+		_list = _device->CreateCommandList(
+			_device->DirectAlloc(
+				0,
+				0
+			)
+		);
+		_list->Close();
 		_device->GetError();
-		for (uint8_t x = 0; x < Frames; x++) {
-			_allocs[x] = _device->CreateCommandAllocator();
-		}
-		_device->GetError();
-		_list = _device->CreateCommandList(_allocs[0]);
-		_list->Reset(_allocs[0].get(), nullptr);
 	}
 	auto GraphicsHandler::Deinitialize() -> void {
 		// wait for the gpu to finish all frames
@@ -40,7 +39,6 @@ namespace Cyanite::GraphicsKit {
 		for (int x = 0; x < Frames; ++x)
 		{
 			_renderTargets[x] = nullptr;
-			_allocs[x] = nullptr;
 		};
 	}
 
@@ -48,6 +46,7 @@ namespace Cyanite::GraphicsKit {
 	auto GraphicsHandler::Render() -> void {
 		UpdatePipeline();
 		_device->ExecuteDirect({ _list });
+		_device->Draw();
 	}
 	auto GraphicsHandler::Resize(uint32_t width, uint32_t height) -> void {}
 	auto GraphicsHandler::SetDebugMode() -> void {

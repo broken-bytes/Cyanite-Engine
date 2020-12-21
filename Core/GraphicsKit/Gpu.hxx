@@ -50,6 +50,13 @@ namespace Cyanite::GraphicsKit {
 
 		auto GetError() -> void;
 
+		/// <summary>
+		/// Return a single direct alloc for now. Multi threading to be done later
+		/// </summary>
+		/// <returns></returns>
+		auto DirectAlloc(uint8_t threadId, uint64_t frameId)
+			->winrt::com_ptr<ID3D12CommandAllocator>;
+		auto Draw() -> void;
 		auto Update(winrt::com_ptr<ID3D12GraphicsCommandList> list) -> void;
 		
 	private:
@@ -72,7 +79,7 @@ namespace Cyanite::GraphicsKit {
 		winrt::com_ptr<ID3D12CommandQueue> _computeQueue;
 		winrt::com_ptr<ID3D12CommandQueue> _bundleQueue;
 
-		winrt::com_ptr<ID3D12CommandAllocator> _directAlloc;
+		std::array<winrt::com_ptr<ID3D12CommandAllocator>, 2> _directAlloc;
 
 		auto ExecuteCommandLists(
 			std::vector<winrt::com_ptr<ID3D12GraphicsCommandList>> lists,
@@ -94,7 +101,6 @@ namespace Cyanite::GraphicsKit {
 		
 		// Drawing ----
 		auto DrawRtvs() -> void;
-		auto Draw() -> void;
 		auto Signal(
 			winrt::com_ptr<ID3D12CommandQueue> commandQueue,
 			winrt::com_ptr<ID3D12Fence> fence) -> uint64_t;
