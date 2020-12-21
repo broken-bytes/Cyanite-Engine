@@ -17,7 +17,7 @@ namespace Cyanite::GraphicsKit {
 	}
 
 	auto Gpu::CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE type,
-		D3D12_COMMAND_QUEUE_PRIORITY priority) -> winrt::com_ptr<ID3D12CommandQueue> {
+		D3D12_COMMAND_QUEUE_PRIORITY priority) -> winrt::com_ptr<ID3D12CommandAllocator> {
 		winrt::com_ptr<ID3D12CommandAllocator> alloc;
 		winrt::check_hresult(
 			_device->CreateCommandAllocator(
@@ -43,6 +43,8 @@ namespace Cyanite::GraphicsKit {
 				IID_PPV_ARGS(list.put())
 			)
 		);
+
+		return list;
 	}
 
 	auto Gpu::CreateCommandQueue(

@@ -19,6 +19,7 @@ namespace Cyanite::GraphicsKit {
 	}
 	
 	auto CommandQueueHandler::DisposeCommandQueue(winrt::com_ptr<ID3D12CommandQueue> queue) {
+		queue->Release();
 		queue = nullptr;
 	}
 }

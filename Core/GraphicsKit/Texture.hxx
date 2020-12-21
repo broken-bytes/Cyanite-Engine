@@ -12,6 +12,6 @@ namespace Cyanite::GraphicsKit::Components {
 		DXGI_FORMAT Format;
 		Cyanite::MathKit::Types::Vector2<float> Offset;
 		float Rotation;
-		uint8_t* Data;
+		std::vector<uint8_t> Data;
 	};
 }

@@ -4,13 +4,9 @@
 
 #include "Frame.hxx"
 #include "Gpu.hxx"
-
+#include "Texture.hxx"
 
 namespace Cyanite::GraphicsKit {
-	namespace Components {
-		struct Texture;
-	}
-
 	class GraphicsHandler {
 	public:
 		explicit GraphicsHandler(HWND window);
@@ -67,17 +63,6 @@ namespace Cyanite::GraphicsKit {
 		winrt::com_ptr<ID3D12RootSignature> _rootSignature;
 		winrt::com_ptr<ID3D12PipelineState> _pipelineState;
 		winrt::com_ptr<ID3D12PipelineState> _pipelineStateShadowMap;
-
-		// App resources.
-		D3D12_VERTEX_BUFFER_VIEW _vertexBufferView;
-		D3D12_INDEX_BUFFER_VIEW _indexBufferView;
-		winrt::com_ptr<ID3D12Resource> _textures[1];
-		winrt::com_ptr<ID3D12Resource> _textureUploads[1];
-		winrt::com_ptr<ID3D12Resource> _indexBuffer;
-		winrt::com_ptr<ID3D12Resource> _indexBufferUpload;
-		winrt::com_ptr<ID3D12Resource> _vertexBuffer;
-		winrt::com_ptr<ID3D12Resource> _vertexBufferUpload;
-		winrt::com_ptr<ID3D12Resource> _depthStencil;
 
 		auto SetDebugMode() -> void;
 		auto Flush(

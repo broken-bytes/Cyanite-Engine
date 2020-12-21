@@ -1,14 +1,14 @@
 #include "pch.hxx"
 #include "GraphicsHandler.hxx"
+#include "TypeConverter.hxx"
 
 namespace Cyanite::GraphicsKit {
 	GraphicsHandler::GraphicsHandler(HWND window) {
 		_device = std::make_unique<Gpu>();
+		_queue = nullptr;
 	}
 	GraphicsHandler::~GraphicsHandler() {}
 	auto GraphicsHandler::Initialize() -> void {
-		_lists = {};
-		_allocs = {};
 		_queue = _device->CreateCommandQueue();
 
 		for (uint8_t x = 0; x < Frames; x++) {
@@ -61,12 +61,17 @@ namespace Cyanite::GraphicsKit {
 		UpdatePipeline();
 
 		std::vector<ID3D12CommandList*> lists(_lists.size());
-		for (auto list : _lists) {
-			lists.emplace_back(list);
+		for (auto item : _lists) {
+
+			winrt::com_ptr<ID3D12CommandList> temp;
+			lists.emplace_back(
+				*static_cast<ID3D12CommandList*>(item.get())
+			);
+
 		}
 
 		_queue->ExecuteCommandLists(
-			_lists.size(),
+			lists.size(),
 			lists.data()
 		);
 
@@ -99,13 +104,15 @@ namespace Cyanite::GraphicsKit {
 			)
 		);
 
+		auto barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+			_renderTargets[_frameIndex].get(),
+			D3D12_RESOURCE_STATE_PRESENT,
+			D3D12_RESOURCE_STATE_RENDER_TARGET
+		);
+		
 		_lists[0]->ResourceBarrier(
 			1,
-			&CD3DX12_RESOURCE_BARRIER::Transition(
-				_renderTargets[_frameIndex].get(),
-				D3D12_RESOURCE_STATE_PRESENT,
-				D3D12_RESOURCE_STATE_RENDER_TARGET
-			)
+			&barrier
 		);
 		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(
 			_rtvHeap->GetCPUDescriptorHandleForHeapStart(),
@@ -127,13 +134,15 @@ namespace Cyanite::GraphicsKit {
 			nullptr
 		);
 
+
+		barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+			_renderTargets[_frameIndex].get(),
+			D3D12_RESOURCE_STATE_RENDER_TARGET,
+			D3D12_RESOURCE_STATE_PRESENT
+		);
 		_lists[0]->ResourceBarrier(
 			1,
-			&CD3DX12_RESOURCE_BARRIER::Transition(
-				_renderTargets[_frameIndex].get(),
-				D3D12_RESOURCE_STATE_RENDER_TARGET,
-				D3D12_RESOURCE_STATE_PRESENT
-			)
+			&barrier
 		);
 
 		_lists[0]->Close();

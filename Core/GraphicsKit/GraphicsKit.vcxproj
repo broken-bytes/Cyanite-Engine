@@ -160,8 +160,6 @@
   <ItemGroup>
     <ClInclude Include="Camera.hxx" />
     <ClInclude Include="Color.hxx" />
-    <ClInclude Include="CommandAllocatorHandler.hxx" />
-    <ClInclude Include="CommandQueueHandler.hxx" />
     <ClInclude Include="Config.hxx" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DeviceHandler.hxx" />
@@ -185,8 +183,6 @@
     <ClInclude Include="UiWorkerThread.hxx" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CommandAllocatorHandler.cxx" />
-    <ClCompile Include="CommandQueueHandler.cxx" />
     <ClCompile Include="DeviceHandler.cxx" />
     <ClCompile Include="FactoryHandler.cxx" />
     <ClCompile Include="Frame.cxx" />

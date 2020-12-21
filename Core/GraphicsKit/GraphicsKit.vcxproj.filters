@@ -72,12 +72,6 @@
     <ClInclude Include="Gpu.hxx">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CommandAllocatorHandler.hxx">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="CommandQueueHandler.hxx">
-      <Filter>Header Files\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="DeviceHandler.hxx">
       <Filter>Header Files\Systems</Filter>
     </ClInclude>
@@ -112,12 +106,6 @@
     </ClCompile>
     <ClCompile Include="Gpu.cxx">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CommandAllocatorHandler.cxx">
-      <Filter>Source Files\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="CommandQueueHandler.cxx">
-      <Filter>Source Files\Systems</Filter>
     </ClCompile>
     <ClCompile Include="DeviceHandler.cxx">
       <Filter>Source Files\Systems</Filter>

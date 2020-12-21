@@ -54,4 +54,22 @@ namespace Cyanite::GraphicsKit::Tools {
 		return dev;
 	}
 
+	/// <summary>
+/// Casts CommandList from one type to another
+/// </summary>
+/// <typeparam name="T">The type to use</typeparam>
+/// <param name="list">The object to cast</param>
+/// <returns>A new com_ptr with the correct type</returns>
+	template<
+		typename T,
+		typename = std::enable_if<std::is_class_v<ID3D12CommandList>>
+	>
+		auto UseAs(winrt::com_ptr<ID3D12CommandList> list)
+			-> winrt::com_ptr<T> {
+		winrt::com_ptr<T> dev;
+		dev.attach(reinterpret_cast<T>(list.detach()));
+		list = nullptr;
+		return dev;
+	}
+	
 }

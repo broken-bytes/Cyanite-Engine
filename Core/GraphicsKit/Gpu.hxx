@@ -16,7 +16,7 @@ namespace Cyanite::GraphicsKit {
 			D3D12_COMMAND_LIST_TYPE_DIRECT,
 			D3D12_COMMAND_QUEUE_PRIORITY priority =
 			D3D12_COMMAND_QUEUE_PRIORITY_NORMAL
-		)->winrt::com_ptr<ID3D12CommandQueue>;
+		)->winrt::com_ptr<ID3D12CommandAllocator>;
 		
 		auto CreateCommandList(
 			winrt::com_ptr<ID3D12CommandAllocator> alloc,
