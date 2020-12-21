@@ -96,9 +96,6 @@
     <ClInclude Include="UiWorkerThread.hxx">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="View.hxx">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Rect.hxx">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
@@ -136,9 +133,6 @@
     </ClCompile>
     <ClCompile Include="UiWorkerThread.cxx">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="View.cxx">
-      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

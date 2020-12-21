@@ -182,7 +182,6 @@
     <ClInclude Include="TypeConverter.hxx" />
     <ClInclude Include="Types.hxx" />
     <ClInclude Include="UiWorkerThread.hxx" />
-    <ClInclude Include="View.hxx" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DeviceHandler.cxx" />
@@ -199,7 +198,6 @@
     </ClCompile>
     <ClCompile Include="SwapChainHandler.cxx" />
     <ClCompile Include="UiWorkerThread.cxx" />
-    <ClCompile Include="View.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AssetKit\AssetKit.vcxproj">

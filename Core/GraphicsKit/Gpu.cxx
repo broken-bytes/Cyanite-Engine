@@ -2,9 +2,11 @@
 #include "Gpu.hxx"
 
 #include "DeviceHandler.hxx"
+#include "SwapChainHandler.hxx"
 namespace Cyanite::GraphicsKit {
-	Gpu::Gpu() {
+	Gpu::Gpu(HWND window) {
 		auto adapter = DeviceHandler::QueryAdapters();
+		_window = window;
 		winrt::check_hresult(D3D12CreateDevice(
 			adapter.get(),
 			MIN_D3D_LVL,
@@ -29,6 +31,7 @@ namespace Cyanite::GraphicsKit {
 				nullptr
 			);
 		}
+		_swapChain = CreateSwapChain(_window);
 	}
 
 	Gpu::~Gpu() {
@@ -42,6 +45,16 @@ namespace Cyanite::GraphicsKit {
 
 	auto Gpu::FenceValue(uint64_t frame) -> uint64_t {
 		return _fences[_frameIndex]->GetCompletedValue();
+	}
+
+	auto Gpu::CreateSwapChain(std::optional<HWND> handle) -> winrt::com_ptr<IDXGISwapChain4> {
+		if(handle.has_value()) {
+			return SwapChainHandler::CreateSwapChainFor(
+				handle.value(),
+				_directQueue
+			);
+		}
+		return SwapChainHandler::CreateSwapChain(_directQueue);
 	}
 
 	auto Gpu::CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE type,
@@ -107,6 +120,39 @@ namespace Cyanite::GraphicsKit {
 		);
 
 		return fence;
+	}
+
+	auto Gpu::ExecuteDirect(std::array<winrt::com_ptr<ID3D12GraphicsCommandList>, Frames> lists) -> void {
+		ExecuteCommandLists(lists, D3D12_COMMAND_LIST_TYPE_DIRECT);
+	}
+	auto Gpu::ExecuteCopy(std::array<winrt::com_ptr<ID3D12GraphicsCommandList>, Frames> lists) -> void {
+		ExecuteCommandLists(lists, D3D12_COMMAND_LIST_TYPE_COPY);
+	}
+	auto Gpu::ExecuteCompute(
+		std::array<winrt::com_ptr<ID3D12GraphicsCommandList>,
+		Frames> lists) -> void {
+		ExecuteCommandLists(lists, D3D12_COMMAND_LIST_TYPE_COMPUTE);
+	}
+	auto Gpu::ExecuteBundle(std::array<winrt::com_ptr<ID3D12GraphicsCommandList>, Frames> lists) -> void {
+		ExecuteCommandLists(lists, D3D12_COMMAND_LIST_TYPE_BUNDLE);
+	}
+
+	auto Gpu::Wait() -> void {
+		_frameIndex = _swapChain->GetCurrentBackBufferIndex();
+
+		if (_fences[_frameIndex]->GetCompletedValue() <
+			_fenceValues[_frameIndex])
+		{
+			winrt::check_hresult(
+				_fences[_frameIndex]->SetEventOnCompletion(
+					_fenceValues[_frameIndex],
+					_fenceEvent[0]
+				)
+			);
+
+			WaitForSingleObject(_fenceEvent[0], INFINITE);
+		}
+		_fenceValues[_frameIndex]++;
 	}
 
 	auto Gpu::ExecuteCommandLists(

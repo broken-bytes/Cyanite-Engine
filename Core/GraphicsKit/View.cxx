@@ -9,7 +9,7 @@ namespace Cyanite::GraphicsKit::Components {
 
 		if(parent.has_value()) {
 			_parent = std::make_shared<View>(parent.value());
-			CreateWindowW()
+			CreateWindowW(_parent->_window)
 		}
 		
 	}

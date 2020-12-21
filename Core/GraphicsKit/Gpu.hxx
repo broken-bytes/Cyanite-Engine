@@ -8,26 +8,30 @@ namespace Cyanite::GraphicsKit {
 
 	class Gpu {
 	public:
-		Gpu();
+		Gpu(HWND window);
 		~Gpu();
 
 		auto FrameIndex() const->uint64_t;
 		auto FenceValue(uint64_t frame)->uint64_t;
 
-		auto CreateCommandAllocator(
+		[[nodiscard]] auto CreateSwapChain(
+			std::optional<HWND> handle
+		)->winrt::com_ptr<IDXGISwapChain4>;
+		
+		[[nodiscard]] auto CreateCommandAllocator(
 			D3D12_COMMAND_LIST_TYPE type =
 			D3D12_COMMAND_LIST_TYPE_DIRECT,
 			D3D12_COMMAND_QUEUE_PRIORITY priority =
 			D3D12_COMMAND_QUEUE_PRIORITY_NORMAL
 		)->winrt::com_ptr<ID3D12CommandAllocator>;
 		
-		auto CreateCommandList(
+		[[nodiscard]] auto CreateCommandList(
 			winrt::com_ptr<ID3D12CommandAllocator> alloc,
 			D3D12_COMMAND_LIST_TYPE type =
 			D3D12_COMMAND_LIST_TYPE_DIRECT
 			) -> winrt::com_ptr<ID3D12GraphicsCommandList>;
 
-		auto CreateFence(uint64_t value = 0)->winrt::com_ptr<ID3D12Fence1>;
+		[[nodiscard]] auto CreateFence(uint64_t value = 0)->winrt::com_ptr<ID3D12Fence1>;
 
 		auto ExecuteDirect(
 			std::array<winrt::com_ptr<ID3D12GraphicsCommandList>, Frames> lists
@@ -41,9 +45,13 @@ namespace Cyanite::GraphicsKit {
 		auto ExecuteBundle(
 			std::array<winrt::com_ptr<ID3D12GraphicsCommandList>, Frames> lists
 		) -> void;
+
+		auto Wait() -> void;
 		
 	private:
 		GraphicsDevice _device;
+		HWND _window;
+		winrt::com_ptr<IDXGISwapChain4> _swapChain;
 
 		std::array<winrt::com_ptr<ID3D12Fence1>, Frames> _fences;
 		std::array<uint64_t, Frames> _fenceValues;

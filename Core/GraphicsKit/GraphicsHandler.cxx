@@ -4,7 +4,7 @@
 
 namespace Cyanite::GraphicsKit {
 	GraphicsHandler::GraphicsHandler(HWND window) {
-		_device = std::make_unique<Gpu>();
+		_device = std::make_unique<Gpu>(window);
 	}
 	GraphicsHandler::~GraphicsHandler() {}
 	auto GraphicsHandler::Initialize() -> void {
@@ -134,21 +134,7 @@ namespace Cyanite::GraphicsKit {
 	auto GraphicsHandler::PopulateCommandList() -> void {}
 	auto GraphicsHandler::AwaitFrameCompletion() -> void {
 		// swap the current rtv buffer index so we draw on the correct buffer
-		_frameIndex = _swapChain->GetCurrentBackBufferIndex();
-
-		if (_fences[_frameIndex]->GetCompletedValue() <
-			_fenceValues[_frameIndex])
-		{
-			winrt::check_hresult(
-				_fences[_frameIndex]->SetEventOnCompletion(
-					_fenceValues[_frameIndex],
-					_fenceEvent
-				)
-			);
-
-			WaitForSingleObject(_fenceEvent, INFINITE);
-		}
-		_fenceValues[_frameIndex]++;
+		_device->Wait();
 	}
 	auto GraphicsHandler::Worker(uint8_t id) -> void {}
 }
