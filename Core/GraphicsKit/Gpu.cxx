@@ -45,6 +45,24 @@ namespace Cyanite::GraphicsKit {
 		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(
 			_rtvHeap->GetCPUDescriptorHandleForHeapStart()
 		);
+
+		_srvHeap = CreateDescriptorHeap(
+			D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+			1,
+			D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE
+		);
+
+		_srvSize = _device->GetDescriptorHandleIncrementSize(
+			D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV
+		);
+
+		CD3DX12_CPU_DESCRIPTOR_HANDLE srvHandle(
+			_srvHeap->GetCPUDescriptorHandleForHeapStart()
+		);
+
+		CD3DX12_GPU_DESCRIPTOR_HANDLE srvHandle2(
+			_srvHeap->GetGPUDescriptorHandleForHeapStart()
+		);
 		
 		for (int x = 0; x < Frames; x++)
 		{
@@ -88,6 +106,10 @@ namespace Cyanite::GraphicsKit {
 	Gpu::~Gpu() {
 		_device = nullptr;
 		_frameIndex = Frames;
+	}
+
+	auto Gpu::Device() -> winrt::com_ptr<ID3D12Device> {
+		return _device;
 	}
 
 	auto Gpu::FrameIndex() const -> uint64_t {
@@ -161,13 +183,14 @@ namespace Cyanite::GraphicsKit {
 
 	auto Gpu::CreateDescriptorHeap(
 		D3D12_DESCRIPTOR_HEAP_TYPE type,
-		uint32_t numDescriptors
+		uint32_t numDescriptors,
+		D3D12_DESCRIPTOR_HEAP_FLAGS flags
 	) -> winrt::com_ptr<ID3D12DescriptorHeap> {
 		D3D12_DESCRIPTOR_HEAP_DESC rtv = {};
 		winrt::com_ptr<ID3D12DescriptorHeap> heap;
-		rtv.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-		rtv.NumDescriptors = Frames;
-		rtv.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+		rtv.Type = type;
+		rtv.NumDescriptors = numDescriptors;
+		rtv.Flags = flags;
 		winrt::check_hresult(
 			_device->CreateDescriptorHeap(
 				&rtv,
@@ -240,6 +263,11 @@ namespace Cyanite::GraphicsKit {
 			nullptr
 		);
 
+		list->SetDescriptorHeaps(
+			1,
+			_srvHeap.put()
+		);
+		
 		float color[] = { 0,0,0,0 };
 		list->ClearRenderTargetView(
 			rtvHandle,
@@ -337,6 +365,13 @@ namespace Cyanite::GraphicsKit {
 		swprintf_s(outString, size, L"Device removed! DXGI_ERROR code: 0x%X\n", reason);
 		OutputDebugStringW(outString);
 #endif
+	}
+
+	auto Gpu::SrvHeap() -> winrt::com_ptr<ID3D12DescriptorHeap> {
+		return _srvHeap;
+	}
+	auto Gpu::RtvHeap() -> winrt::com_ptr<ID3D12DescriptorHeap> {
+		return _rtvHeap;
 	}
 
 	auto Gpu::DirectAlloc(uint8_t threadId, uint64_t frameId) -> winrt::com_ptr<ID3D12CommandAllocator> {

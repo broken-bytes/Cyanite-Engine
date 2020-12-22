@@ -1,6 +1,11 @@
 #include "pch.hxx"
 #include "GraphicsHandler.hxx"
 #include "TypeConverter.hxx"
+#include "../../Libs/ImGUI/imgui.h"
+#include "../../Libs/ImGUI/imgui_impl_dx12.h"
+#include "../../Libs/ImGUI/imgui_impl_win32.h"
+
+auto open = true;
 
 namespace Cyanite::GraphicsKit {
 	GraphicsHandler::GraphicsHandler(HWND window) {
@@ -16,7 +21,20 @@ namespace Cyanite::GraphicsKit {
 			)
 		);
 		_list->Close();
-		_device->GetError();
+
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		ImGui::StyleColorsDark();
+		ImGui_ImplWin32_Init(_window);
+		ImGui_ImplDX12_Init(
+			_device->Device().get(),
+			Frames,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			_device->SrvHeap().get(),
+			_device->SrvHeap().get()->GetCPUDescriptorHandleForHeapStart(),
+			_device->SrvHeap().get()->GetGPUDescriptorHandleForHeapStart()
+		);
 	}
 	auto GraphicsHandler::Deinitialize() -> void {
 		// wait for the gpu to finish all frames
@@ -24,11 +42,6 @@ namespace Cyanite::GraphicsKit {
 		{
 			AwaitFrameCompletion();
 		}
-
-		// get swapchain out of full screen before exiting
-		BOOL fs = false;
-		if (_swapChain->GetFullscreenState(&fs, nullptr))
-			_swapChain->SetFullscreenState(false, nullptr);
 
 		delete _device.release();
 		_swapChain = nullptr;
@@ -44,7 +57,21 @@ namespace Cyanite::GraphicsKit {
 
 	auto GraphicsHandler::Update() -> void {}
 	auto GraphicsHandler::Render() -> void {
+		float color[] = { 0,0,0,0 };
 		UpdatePipeline();
+
+		ImGui_ImplDX12_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+		ImGui::Begin("Test");
+		ImGui::Text("Test");
+		ImGui::End();
+		ImGui::Render();
+		ImGui_ImplDX12_RenderDrawData(
+			ImGui::GetDrawData(),
+			_list.get()
+		);
+		
 		_device->ExecuteDirect({ _list });
 		_device->Draw();
 	}

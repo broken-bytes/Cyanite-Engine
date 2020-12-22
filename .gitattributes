@@ -10,4 +10,5 @@
 *.c linguist-vendored
 *.txt linguist-vendored
 *.bat linguist-vendored
+Libs/* linguist-vendored
 

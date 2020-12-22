@@ -11,6 +11,8 @@ namespace Cyanite::GraphicsKit {
 		Gpu(HWND window);
 		~Gpu();
 
+		auto Device()->winrt::com_ptr<ID3D12Device>;
+
 		auto FrameIndex() const->uint64_t;
 		auto FenceValue(uint64_t frame)->uint64_t;
 
@@ -50,6 +52,10 @@ namespace Cyanite::GraphicsKit {
 
 		auto GetError() -> void;
 
+
+		auto SrvHeap()->winrt::com_ptr<ID3D12DescriptorHeap>;
+		auto RtvHeap()->winrt::com_ptr<ID3D12DescriptorHeap>;
+		
 		/// <summary>
 		/// Return a single direct alloc for now. Multi threading to be done later
 		/// </summary>
@@ -63,8 +69,13 @@ namespace Cyanite::GraphicsKit {
 		GraphicsDevice _device;
 		HWND _window;
 		winrt::com_ptr<IDXGISwapChain4> _swapChain;
+		
 		winrt::com_ptr<ID3D12DescriptorHeap> _rtvHeap;
 		uint64_t _rtvSize;
+		
+		winrt::com_ptr<ID3D12DescriptorHeap> _srvHeap;
+		uint64_t _srvSize;
+		
 		std::array<winrt::com_ptr<ID3D12Resource>, Frames> _renderTargets;
 		std::array<winrt::com_ptr<ID3D12Resource>, Frames> _buffers;
 		
@@ -95,7 +106,9 @@ namespace Cyanite::GraphicsKit {
 
 		auto CreateDescriptorHeap(
 			D3D12_DESCRIPTOR_HEAP_TYPE type,
-			uint32_t numDescriptors
+			uint32_t numDescriptors = Frames,
+			D3D12_DESCRIPTOR_HEAP_FLAGS = 
+			D3D12_DESCRIPTOR_HEAP_FLAG_NONE
 		)->winrt::com_ptr<ID3D12DescriptorHeap>;
 
 		

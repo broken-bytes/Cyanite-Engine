@@ -25,6 +25,9 @@
     <Filter Include="Source Files\Components">
       <UniqueIdentifier>{53af6dad-3070-419f-927b-c72e34fd6113}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{5f2a2cb1-6601-4483-8c56-67e8d493a8bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dx12.h">
@@ -98,6 +101,9 @@
     </ClInclude>
     <ClInclude Include="Rect.hxx">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UIHandler.hxx">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('..\..\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,12 +18,104 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="async.h" />
+    <ClInclude Include="async_logger-inl.h" />
+    <ClInclude Include="async_logger.h" />
+    <ClInclude Include="cfg\argv.h" />
+    <ClInclude Include="cfg\env.h" />
+    <ClInclude Include="cfg\helpers-inl.h" />
+    <ClInclude Include="cfg\helpers.h" />
+    <ClInclude Include="common-inl.h" />
+    <ClInclude Include="common.h" />
+    <ClInclude Include="details\backtracer-inl.h" />
+    <ClInclude Include="details\backtracer.h" />
+    <ClInclude Include="details\circular_q.h" />
+    <ClInclude Include="details\console_globals.h" />
+    <ClInclude Include="details\file_helper-inl.h" />
+    <ClInclude Include="details\file_helper.h" />
+    <ClInclude Include="details\fmt_helper.h" />
+    <ClInclude Include="details\log_msg-inl.h" />
+    <ClInclude Include="details\log_msg.h" />
+    <ClInclude Include="details\log_msg_buffer-inl.h" />
+    <ClInclude Include="details\log_msg_buffer.h" />
+    <ClInclude Include="details\mpmc_blocking_q.h" />
+    <ClInclude Include="details\null_mutex.h" />
+    <ClInclude Include="details\os-inl.h" />
+    <ClInclude Include="details\os.h" />
+    <ClInclude Include="details\periodic_worker-inl.h" />
+    <ClInclude Include="details\periodic_worker.h" />
+    <ClInclude Include="details\registry-inl.h" />
+    <ClInclude Include="details\registry.h" />
+    <ClInclude Include="details\synchronous_factory.h" />
+    <ClInclude Include="details\tcp_client-windows.h" />
+    <ClInclude Include="details\tcp_client.h" />
+    <ClInclude Include="details\thread_pool-inl.h" />
+    <ClInclude Include="details\thread_pool.h" />
+    <ClInclude Include="details\windows_include.h" />
+    <ClInclude Include="fmt\bin_to_hex.h" />
+    <ClInclude Include="fmt\bundled\chrono.h" />
+    <ClInclude Include="fmt\bundled\color.h" />
+    <ClInclude Include="fmt\bundled\compile.h" />
+    <ClInclude Include="fmt\bundled\core.h" />
+    <ClInclude Include="fmt\bundled\format-inl.h" />
+    <ClInclude Include="fmt\bundled\format.h" />
+    <ClInclude Include="fmt\bundled\locale.h" />
+    <ClInclude Include="fmt\bundled\os.h" />
+    <ClInclude Include="fmt\bundled\ostream.h" />
+    <ClInclude Include="fmt\bundled\posix.h" />
+    <ClInclude Include="fmt\bundled\printf.h" />
+    <ClInclude Include="fmt\bundled\ranges.h" />
+    <ClInclude Include="fmt\chrono.h" />
+    <ClInclude Include="fmt\fmt.h" />
+    <ClInclude Include="fmt\ostr.h" />
+    <ClInclude Include="formatter.h" />
+    <ClInclude Include="fwd.h" />
+    <ClInclude Include="logger-inl.h" />
+    <ClInclude Include="logger.h" />
+    <ClInclude Include="pattern_formatter-inl.h" />
+    <ClInclude Include="pattern_formatter.h" />
+    <ClInclude Include="sinks\android_sink.h" />
+    <ClInclude Include="sinks\ansicolor_sink-inl.h" />
+    <ClInclude Include="sinks\ansicolor_sink.h" />
+    <ClInclude Include="sinks\base_sink-inl.h" />
+    <ClInclude Include="sinks\base_sink.h" />
+    <ClInclude Include="sinks\basic_file_sink-inl.h" />
+    <ClInclude Include="sinks\basic_file_sink.h" />
+    <ClInclude Include="sinks\daily_file_sink.h" />
+    <ClInclude Include="sinks\dist_sink.h" />
+    <ClInclude Include="sinks\dup_filter_sink.h" />
+    <ClInclude Include="sinks\hourly_file_sink.h" />
+    <ClInclude Include="sinks\msvc_sink.h" />
+    <ClInclude Include="sinks\null_sink.h" />
+    <ClInclude Include="sinks\ostream_sink.h" />
+    <ClInclude Include="sinks\ringbuffer_sink.h" />
+    <ClInclude Include="sinks\rotating_file_sink-inl.h" />
+    <ClInclude Include="sinks\rotating_file_sink.h" />
+    <ClInclude Include="sinks\sink-inl.h" />
+    <ClInclude Include="sinks\sink.h" />
+    <ClInclude Include="sinks\stdout_color_sinks-inl.h" />
+    <ClInclude Include="sinks\stdout_color_sinks.h" />
+    <ClInclude Include="sinks\stdout_sinks-inl.h" />
+    <ClInclude Include="sinks\stdout_sinks.h" />
+    <ClInclude Include="sinks\syslog_sink.h" />
+    <ClInclude Include="sinks\systemd_sink.h" />
+    <ClInclude Include="sinks\tcp_sink.h" />
+    <ClInclude Include="sinks\wincolor_sink-inl.h" />
+    <ClInclude Include="sinks\wincolor_sink.h" />
+    <ClInclude Include="sinks\win_eventlog_sink.h" />
+    <ClInclude Include="spdlog-inl.h" />
+    <ClInclude Include="spdlog.h" />
+    <ClInclude Include="stopwatch.h" />
+    <ClInclude Include="tweakme.h" />
+    <ClInclude Include="version.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{3b317dcb-b52c-48fa-9476-1346e35a8ce1}</ProjectGuid>
-    <RootNamespace>GraphicsKit</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <ProjectGuid>{344153f4-5e2e-4017-986f-09eb27f4674f}</ProjectGuid>
+    <RootNamespace>spdlog</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -57,7 +148,6 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">
-    <Import Project="..\..\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('..\..\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.targets')" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -91,10 +181,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.hxx</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <CompileAsWinRT>true</CompileAsWinRT>
-      <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -128,7 +215,7 @@
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -145,9 +232,7 @@
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.hxx</PrecompiledHeaderFile>
-      <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -157,66 +242,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="Camera.hxx" />
-    <ClInclude Include="Color.hxx" />
-    <ClInclude Include="Config.hxx" />
-    <ClInclude Include="d3dx12.h" />
-    <ClInclude Include="DeviceHandler.hxx" />
-    <ClInclude Include="FactoryHandler.hxx" />
-    <ClInclude Include="Frame.hxx" />
-    <ClInclude Include="Gpu.hxx" />
-    <ClInclude Include="GPUBuffer.hxx" />
-    <ClInclude Include="GpuResource.hxx" />
-    <ClInclude Include="GpuWorkerThread.hxx" />
-    <ClInclude Include="GraphicsHandler.hxx" />
-    <ClInclude Include="Heap.hxx" />
-    <ClInclude Include="Light.hxx" />
-    <ClInclude Include="Helpers.hxx" />
-    <ClInclude Include="pch.hxx" />
-    <ClInclude Include="Rect.hxx" />
-    <ClInclude Include="Scene.hxx" />
-    <ClInclude Include="SwapChainHandler.hxx" />
-    <ClInclude Include="Texture.hxx" />
-    <ClInclude Include="Transform.hxx" />
-    <ClInclude Include="TypeConverter.hxx" />
-    <ClInclude Include="Types.hxx" />
-    <ClInclude Include="UIHandler.hxx" />
-    <ClInclude Include="UiWorkerThread.hxx" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="DeviceHandler.cxx" />
-    <ClCompile Include="FactoryHandler.cxx" />
-    <ClCompile Include="Frame.cxx" />
-    <ClCompile Include="Gpu.cxx" />
-    <ClCompile Include="GPUBuffer.cxx" />
-    <ClCompile Include="GpuWorkerThread.cxx" />
-    <ClCompile Include="GraphicsHandler.cxx" />
-    <ClCompile Include="Heap.cxx" />
-    <ClCompile Include="pch.cxx">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="SwapChainHandler.cxx" />
-    <ClCompile Include="UiWorkerThread.cxx" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Libs\ImGUI\ImGUI.vcxproj">
-      <Project>{b1f0f003-bb3a-4638-94bf-bf7a691a9140}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\AssetKit\AssetKit.vcxproj">
-      <Project>{90085664-1fe9-4259-b4b5-38310b303ace}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.props'))" />
-    <Error Condition="!Exists('..\..\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.targets'))" />
-  </Target>
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
 </Project>
