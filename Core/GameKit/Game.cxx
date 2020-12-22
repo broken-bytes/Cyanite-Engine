@@ -1,6 +1,7 @@
 #include "pch.hxx"
 #include "Game.hxx"
 #include "../AssetKit/AssetHandler.hxx"
+#include "../EventKit/EventQueue.hxx"
 #include "../GraphicsKit/GraphicsHandler.hxx"
 
 namespace Cyanite::GameKit {
@@ -38,6 +39,12 @@ namespace Cyanite::GameKit {
 	}
 
 	auto Game::OnResize(uint32_t width, uint32_t height) -> void {
-		_graphics->Resize(width, height);
+		EventKit::EventQueue::Push(
+			EventKit::Event{
+				EventKit::EventType::WindowResize,
+				nullptr,
+				MathKit::Types::Vector2<uint32_t> { width, height},
+			}
+		);
 	}
 }

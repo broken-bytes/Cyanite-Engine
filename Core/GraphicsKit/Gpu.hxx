@@ -53,6 +53,7 @@ namespace Cyanite::GraphicsKit {
 		auto GetError() -> void;
 
 
+		auto Resize(uint32_t width, uint32_t height) -> void;
 		auto SrvHeap()->winrt::com_ptr<ID3D12DescriptorHeap>;
 		auto RtvHeap()->winrt::com_ptr<ID3D12DescriptorHeap>;
 		

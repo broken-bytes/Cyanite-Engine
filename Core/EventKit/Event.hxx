@@ -3,30 +3,32 @@
 #include <functional>
 #include <optional>
 
-enum class EventType {
-	Generic,
-	GameInput,
-	WindowResize,
-	WindowFullScreen
-};
+namespace Cyanite::EventKit {
+	enum class EventType {
+		Generic,
+		GameInput,
+		WindowResize,
+		WindowFullScreen
+	};
 
 
-struct IEvent {
-	EventType Type;
-	void* Sender;
-	void* Data;
-	std::function<void(void*)> Callback;
-	
-	bool Handled;
-};
+	struct IEvent {
+		EventType Type;
+		void* Sender;
+		void* Data;
 
-template<
-	typename S,
-	typename D,
-	typename C
->
-struct Event : IEvent {
-	S Sender;
-	D Data;
-	std::function<void(C)> Callback;
-};
+		bool Handled;
+	};
+
+	template<
+		typename S,
+		typename D
+	>
+		struct Event : IEvent {
+		Event(EventType type, S sender, D data) {
+			this->Sender = reinterpret_cast<void*>(&sender);
+			this->Data = reinterpret_cast<void*>(&data);
+			this->Handled = false;
+		}
+	};
+}

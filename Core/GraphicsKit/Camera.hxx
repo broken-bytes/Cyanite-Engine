@@ -17,6 +17,7 @@ namespace Cyanite::GraphicsKit {
 
 		auto Ortographic() const -> bool;
 		auto Position() const -> MathKit::Types::Vector3<float>;
+		auto Rotate(MathKit::Types::Vector3<float> rotation) -> void;
 
 	private:
 		float _fov;   // Vertical field of view.

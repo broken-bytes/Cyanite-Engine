@@ -27,7 +27,7 @@ inline void SetNameIndexed(ID3D12Object*, LPCWSTR, UINT)
 }
 #endif
 
-inline auto NameD3D12Obj(ID3D12Object* object, wchar_t* name) {
+inline auto NameD3D12Obj(ID3D12Object* object, const wchar_t* name) {
     object->SetName(name);
 }
 

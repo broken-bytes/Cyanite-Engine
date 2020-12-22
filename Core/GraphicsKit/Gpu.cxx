@@ -233,6 +233,7 @@ namespace Cyanite::GraphicsKit {
 	auto Gpu::Update(winrt::com_ptr<ID3D12GraphicsCommandList> list) -> void {
 		Wait();
 
+		
 		winrt::check_hresult(_directAlloc[_frameIndex]->Reset());
 		winrt::check_hresult(
 			list->Reset(
@@ -263,9 +264,11 @@ namespace Cyanite::GraphicsKit {
 			nullptr
 		);
 
+		ID3D12DescriptorHeap* heaps[] = { _srvHeap.get() };
+
 		list->SetDescriptorHeaps(
-			1,
-			_srvHeap.put()
+			_countof(heaps),
+			heaps
 		);
 		
 		float color[] = { 0,0,0,0 };
@@ -275,8 +278,7 @@ namespace Cyanite::GraphicsKit {
 			0,
 			nullptr
 		);
-
-
+		
 		barrier = CD3DX12_RESOURCE_BARRIER::Transition(
 			_renderTargets[FrameIndex()].get(),
 			D3D12_RESOURCE_STATE_RENDER_TARGET,
@@ -365,6 +367,29 @@ namespace Cyanite::GraphicsKit {
 		swprintf_s(outString, size, L"Device removed! DXGI_ERROR code: 0x%X\n", reason);
 		OutputDebugStringW(outString);
 #endif
+	}
+
+	auto Gpu::Resize(uint32_t width, uint32_t height) -> void {
+		for(int x = 0; x < Frames; x++) {
+			_fenceValues[x] = _fenceValues[_frameIndex];
+		}
+
+		Wait();
+		
+		DXGI_SWAP_CHAIN_DESC desc {};
+		winrt::check_hresult(_swapChain->GetDesc(&desc));
+		winrt::check_hresult(
+			_swapChain->ResizeBuffers(
+				Frames,
+				width,
+				height,
+				desc.BufferDesc.Format,
+				desc.Flags
+			)
+		);
+
+		_frameIndex = _swapChain->GetCurrentBackBufferIndex();
+		
 	}
 
 	auto Gpu::SrvHeap() -> winrt::com_ptr<ID3D12DescriptorHeap> {

@@ -11,6 +11,11 @@ namespace Cyanite::GraphicsKit {
 	GraphicsHandler::GraphicsHandler(HWND window) {
 		SetDebugMode();
 		_device = std::make_unique<Gpu>(window);
+		_relay = std::make_unique<EventKit::EventRelay>(
+			[this](EventKit::IEvent event) {
+				this->EventHandler(event);
+			}
+		);
 	}
 	GraphicsHandler::~GraphicsHandler() {}
 	auto GraphicsHandler::Initialize() -> void {
@@ -25,7 +30,7 @@ namespace Cyanite::GraphicsKit {
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		ImGui::StyleColorsDark();
+		ImGui::StyleColorsLight();
 		ImGui_ImplWin32_Init(_window);
 		ImGui_ImplDX12_Init(
 			_device->Device().get(),
@@ -71,11 +76,19 @@ namespace Cyanite::GraphicsKit {
 			ImGui::GetDrawData(),
 			_list.get()
 		);
-		
+		ImGui::EndFrame();
+
+		auto imgui = ImGui::GetDrawData();
+		ImGui_ImplDX12_RenderDrawData(imgui, _list.get());
+
 		_device->ExecuteDirect({ _list });
 		_device->Draw();
 	}
-	auto GraphicsHandler::Resize(uint32_t width, uint32_t height) -> void {}
+	auto GraphicsHandler::Resize(uint32_t width, uint32_t height) -> void {
+		ImGui_ImplDX12_InvalidateDeviceObjects();
+		ImGui_ImplDX12_CreateDeviceObjects();
+		//_device->Resize(width, height);
+	}
 	auto GraphicsHandler::SetDebugMode() -> void {
 #if defined(_DEBUG)
 		// Always enable the debug layer before doing anything DX12 related
@@ -126,4 +139,11 @@ namespace Cyanite::GraphicsKit {
 		_device->Wait();
 	}
 	auto GraphicsHandler::Worker(uint8_t id) -> void {}
+	auto GraphicsHandler::EventHandler(EventKit::IEvent event) -> void {
+		if (event.Type == EventKit::EventType::WindowResize) {
+			MathKit::Types::Vector2<uint32_t> dim{ 0,0 };
+			dim = *static_cast<MathKit::Types::Vector2<uint32_t>*>(event.Data);
+			Resize(dim.X, dim.Y);
+		}
+	}
 }
